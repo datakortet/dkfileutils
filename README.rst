@@ -1,6 +1,6 @@
 
-.. image:: https://travis-ci.org/thebjorn/dkfileutils.svg?branch=master
-    :target: https://travis-ci.org/thebjorn/dkfileutils
+.. image:: https://travis-ci.org/datakortet/dkfileutils.svg?branch=master
+    :target: https://travis-ci.org/datakortet/dkfileutils
 
 
 dkfileutils -- file and directory utilities
