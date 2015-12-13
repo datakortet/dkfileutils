@@ -7,4 +7,4 @@ BASEDIR = os.path.dirname(__file__)
 
 
 def test_pfind():
-    assert pfind.pfind('.', 'setup.py') == os.path.abspath(BASEDIR + '/../setup.py')
+    assert pfind.pfind(BASEDIR, 'setup.py') == os.path.abspath(BASEDIR + '/../setup.py')
