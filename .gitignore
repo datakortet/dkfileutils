@@ -56,3 +56,6 @@ target/
 *.rst~
 
 .idea/
+
+*.ini~
+.md5
