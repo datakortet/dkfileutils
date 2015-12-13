@@ -169,7 +169,7 @@ class Path(str):
 
     @doc(os.path.normpath)
     def normpath(self):
-        return Path(os.path.normpath(self))
+        return Path(os.path.normpath(str(self)))
 
     @doc(os.path.realpath)
     def realpath(self):
