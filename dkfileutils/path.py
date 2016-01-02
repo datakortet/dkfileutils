@@ -179,8 +179,8 @@ class Path(str):
         return Path(os.path.realpath(self))
 
     @doc(os.path.relpath)
-    def relpath(self, *args, **kw):
-        return Path(os.path.relpath(self, *args, **kw))
+    def relpath(self, other=""):
+        return Path(os.path.relpath(str(self), str(other)))
 
     @doc(os.path.split)
     def split(self, **kwargs):
