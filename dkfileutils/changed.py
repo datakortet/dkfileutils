@@ -34,7 +34,7 @@ def changed(dirname, filename='.md5', args=None):
     current_digest = cachefile.open().read() if cachefile.exists() else ""
     
     _digest = digest(dirname)
-    if args and args.verbose:
+    if args and args.verbose:  # pragma: nocover
         print "md5:", _digest
     has_changed = current_digest != _digest
 
@@ -45,7 +45,7 @@ def changed(dirname, filename='.md5', args=None):
     return has_changed
 
 
-def main():
+def main():  # pragma: nocover
     p = argparse.ArgumentParser()
     p.add_argument(
         'directory',
@@ -62,5 +62,5 @@ def main():
     sys.exit(_changed)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: nocover
     main()

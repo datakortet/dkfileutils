@@ -64,7 +64,7 @@ def list_files(dirname='.', curdir=".", relative=True):
             yield md5(open(pth).read()).hexdigest(), p.replace('\\', '/')
 
 
-def main():
+def main():  # pragma: nocover
     p = argparse.ArgumentParser(add_help="Recursively list interesting files.")
     p.add_argument(
         'directory', nargs="?", default="",
@@ -86,5 +86,5 @@ def main():
         print chsm, fname
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: nocover
     main()
