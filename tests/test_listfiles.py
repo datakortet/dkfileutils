@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
-from dkfileutils import listfiles, path
+from dkfileutils.listfiles import list_files, read_skipfile
+from yamldirs import create_files
 
 BASEDIR = os.path.dirname(__file__)
 print "FILE:", __file__
@@ -14,18 +15,30 @@ def _files(fit):
 
 
 def test_skipfile():
-    assert listfiles.read_skipfile('.', ['foo']) == ['foo']
+    assert read_skipfile('.', ['foo']) == ['foo']
 
 
-def test_listfiles():
-    empty = path.Path(BASEDIR).makedirs('empty')
-    assert _files(listfiles.list_files(empty)) == []
+def test_skippy():
+    files = """
+        - a
+        - b
+        - f:
+            - .dotfile
+        - __pycache__:
+            - c
+        - htmlcov:
+            - d
+        - e.pyc
+        - foo.egg-info:
+            - e
+    """
+    with create_files(files) as root:
+        assert [fname for _hex, fname in list_files(root, root)] == [
+            'a', 'b'
+        ]
 
+        assert [fname for _hex, fname in list_files(root, root, False)] == [
+            'a', 'b'
+        ]
 
-def test_skips():
-    skiptests = path.Path(BASEDIR) / 'skiptests'
-    print "SKIPTESTS: [%s][%s]" % (skiptests, BASEDIR)
-    assert _files(listfiles.list_files(skiptests, skiptests)) == [
-        'a',
-        'foo/bar'
-    ]
+        assert [fname for _hex, fname in list_files(os.path.join(root, '.dotdir'), root)] == []

@@ -40,7 +40,7 @@ class Path(str):
             for d in dotfiles:
                 files.remove(d)
             for fname in files:
-                yield os.path.join(root, fname)
+                yield Path(os.path.join(root, fname))
 
     def __contains__(self, item):
         if self.isdir():
@@ -73,13 +73,16 @@ class Path(str):
                 r += pat[i]
                 i += 1
         r += r'\Z(?ms)'
+        # print '\n\npat', pat
+        # print 'regex:', r
+        # print [s.relpath(self).replace('\\', '/') for s in self]
         rx = re.compile(r)
 
         def match(d):
             m = rx.match(d)
             return not m if negate else m
 
-        return [Path(s) for s in self if match(s.replace('\\', '/'))]
+        return [s for s in self if match(s.relpath(self).replace('\\', '/'))]
 
     @doc(os.path.abspath)
     def abspath(self):
@@ -101,7 +104,7 @@ class Path(str):
 
     @doc(os.path.commonprefix)
     def commonprefix(self, *args):
-        return os.path.commonprefix([self] + list(args))
+        return os.path.commonprefix([str(self)] + [str(a) for a in args])
 
     @doc(os.path.dirname)
     def dirname(self):
@@ -176,8 +179,8 @@ class Path(str):
         return Path(os.path.realpath(self))
 
     @doc(os.path.relpath)
-    def relpath(self, *args, **kw):
-        return Path(os.path.relpath(self, *args, **kw))
+    def relpath(self, other=""):
+        return Path(os.path.relpath(str(self), str(other)))
 
     @doc(os.path.split)
     def split(self, **kwargs):
@@ -199,7 +202,7 @@ class Path(str):
     def ext(self):
         return self.splitext()[1]
 
-    if hasattr(os.path, 'splitunc'):
+    if hasattr(os.path, 'splitunc'):  # pragma: nocover
         @doc(os.path.splitunc)
         def splitunc(self):
             return os.path.splitunc(self)
@@ -241,15 +244,19 @@ class Path(str):
         return os.lstat(self)
 
     @doc(os.makedirs)
-    def makedirs(self, *args, **kw):
+    def makedirs(self, path, mode=0777):
+        pth = os.path.join(self, path)
         try:
-            return os.makedirs(self, *args, **kw)
-        except:
+            os.makedirs(pth, mode)
+        except OSError:
             pass
+        return Path(pth)
 
     @doc(os.mkdir)
-    def mkdir(self, *args, **kw):
-        return os.mkdir(self, *args, **kw)
+    def mkdir(self, path, mode=0777):
+        pth = os.path.join(self, path)
+        os.mkdir(pth, mode)
+        return Path(pth)
 
     @doc(os.remove)
     def remove(self):

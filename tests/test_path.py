@@ -2,16 +2,164 @@
 import glob
 import os
 from dkfileutils import path
+from yamldirs import create_files
+
+opjoin = os.path.join
 
 
-# def test___iter__():
-#     assert os.path.__iter__('empty') == path.Path('empty').__iter__()
-#
-# def test___contains__():
-#     assert os.path.__contains__('empty') == path.Path('empty').__contains__()
+def _relcontent(root):
+    return [p.relpath(root) for p in root]
+
+
+def test_open():
+    files = """
+        b: hello
+    """
+    with create_files(files) as root:
+        assert (path.Path(root) / 'b').open().read() == 'hello'
+
+
+def test_iter():
+    files = """
+        - .dotfile
+        - .dotdir:
+            - d
+            - e
+        - a
+        - b
+        - c:
+            - d
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert _relcontent(root) == ['a', 'b', opjoin('c', 'd')]
+
+
+def test_contains():
+    files = """
+        - a
+        - b
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert 'a' in root
+        assert 'b' in root
+        assert 'c' not in root
+
+
+def test_unlink():
+    files = """
+        - a
+        - b
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert [p.relpath(root) for p in root] == ['a', 'b']
+
+        b = root / 'b'
+        b.unlink()
+        assert [p.relpath(root) for p in root] == ['a']
+
+        a = root / 'a'
+        a.remove()
+        assert [p.relpath(root) for p in root] == []
+
 
 def test_glob():
-    assert glob.glob('empty') == path.Path('empty').glob('*')
+    files = """
+        - a.py
+        - b:
+            - a.txt
+            - aa.txt
+        - d
+        - e:
+            - a:
+                - b
+        - f
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert [p.relpath(root) for p in root.glob('**/*.py')] == ['a.py']
+        assert [p.relpath(root) for p in root.glob('*.py')] == ['a.py']
+        assert [p.relpath(root) for p in root.glob('b/a?.txt')] == [
+            opjoin('b', 'aa.txt')
+        ]
+        assert [p.relpath(root) for p in root.glob('**/a.*')] == [
+            'a.py', opjoin('b', 'a.txt')
+        ]
+
+
+def test_subdirs():
+    files = """
+        - a.py
+        - b:
+            - a.txt
+            - aa.txt
+        - d
+        - e:
+            - a:
+                - b
+        - f
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert [d.relpath(root) for d in root.subdirs()] == ['b', 'e']
+
+
+def test_files():
+    files = """
+        - a.py
+        - b:
+            - a.txt
+            - aa.txt
+        - d
+        - e:
+            - a:
+                - b
+        - f
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert [d.relpath(root) for d in root.files()] == ['a.py', 'd', 'f']
+
+
+def test_makedirs():
+    files = """
+        a:
+            - b:
+                - empty
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        e = root.makedirs('a/b/c/d')
+        # print "root", root
+        # print 'E:', e
+        assert e.isdir()
+        assert e.relpath(root) == path.Path('a')/'b'/'c'/'d'
+
+        e2 = root.makedirs('a/b/c/d')
+        assert e2.isdir()
+
+        b = root.mkdir('b')
+        assert b.isdir()
+
+
+def test_commonprefix():
+    files = """
+        - a.py
+        - b:
+            - a.txt
+            - aa.txt
+        - d
+        - e:
+            - a:
+                - b
+        - f
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert root.commonprefix(root) == root
+        assert root.commonprefix(root/'a.py', root/'d', root/'b'/'a.txt') == root
 
 
 def test_abspath():
@@ -50,16 +198,40 @@ def test_expandvars():
     assert os.path.expandvars('empty') == path.Path('empty').expandvars()
 
 
-# def test_getatime():
-#     assert os.path.getatime('empty') == path.Path('empty').getatime()
+def test_getatime():
+    files = """
+        b: hello
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert os.path.getatime(root/'b') == (root/'b').getatime()
 
 
-# def test_getctime():
-#     assert os.path.getctime('empty') == path.Path('empty').getctime()
+def test_getctime():
+    files = """
+        b: hello
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert os.path.getctime(root/'b') == (root/'b').getctime()
 
 
-# def test_getmtime():
-#     assert os.path.getmtime('empty') == path.Path('empty').getmtime()
+def test_getmtime():
+    files = """
+        b: hello
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert os.path.getmtime(root/'b') == (root/'b').getmtime()
+
+
+def test_access():
+    files = """
+        b: hello
+    """
+    with create_files(files) as _root:
+        b = path.Path(_root) / 'b'
+        assert b.access(os.R_OK)
 
 
 def test_getsize():
@@ -122,12 +294,8 @@ def test_splitext():
     assert os.path.splitext('empty') == path.Path('empty').splitext()
 
 
-# def test_ext():
-#     assert os.path.ext('empty') == path.Path('empty').ext()
-
-
-# def test_access():
-#     assert os.access('empty') == path.Path('empty').access()
+def test_ext():
+    assert path.Path('hello.world').ext == '.world'
 
 
 def test_listdir():

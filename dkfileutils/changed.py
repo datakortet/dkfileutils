@@ -34,7 +34,7 @@ def changed(dirname, filename='.md5', args=None):
     current_digest = cachefile.open().read() if cachefile.exists() else ""
     
     _digest = digest(dirname)
-    if args and args.verbose:
+    if args and args.verbose:  # pragma: nocover
         print "md5:", _digest
     has_changed = current_digest != _digest
 
