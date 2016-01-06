@@ -30,6 +30,6 @@ def pfind(path, fname):
     return None
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: nocover
     _path, filename = sys.argv[1], sys.argv[2]
     print pfind(_path, filename)

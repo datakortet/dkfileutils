@@ -15,12 +15,13 @@ def read_skipfile(dirname='.', defaults=None):
     try:
         return defaults + open(
             os.path.join(dirname, SKIPFILE_NAME)
-        ).read().split('\n')
+        ).read().splitlines()
     except IOError:
         return defaults
 
 
 def list_files(dirname='.', curdir=".", relative=True):
+    print "LISTFILES:", dirname, curdir, relative, str(dirname)
     skipdirs = ['__pycache__', '.git', '.svn', 'htmlcov', 'dist', 'build',
                 '.idea', 'tasks', 'static', 'media', 'data', 'migrations',
                 '.doctrees', '_static', 'node_modules', 'external',
@@ -29,7 +30,8 @@ def list_files(dirname='.', curdir=".", relative=True):
     skipexts = ['.pyc', '~', '.svg', '.txt', '.TTF', '.tmp', '.errmail',
                 '.email', '.bat', '.dll', '.exe', '.Dll', '.jpg', '.gif',
                 '.png', '.ico', '.db', '.md5']
-    skipfiles = read_skipfile()
+    skipfiles = read_skipfile(str(dirname))
+    print "SKIPFILES:", skipfiles
 
     def clean_dirs(dirs):
         for d in dirs:
@@ -39,10 +41,10 @@ def list_files(dirname='.', curdir=".", relative=True):
             if d in dirs:
                 dirs.remove(d)
 
-    def keep_file(fname):
+    def keep_file(fname, pth):
         if fname.startswith('.'):
             return False
-        if fname in skipfiles:
+        if pth in skipfiles:
             return False
         for ext in skipexts:
             if fname.endswith(ext):
@@ -51,20 +53,18 @@ def list_files(dirname='.', curdir=".", relative=True):
 
     for root, dirs, files in os.walk(os.path.abspath(str(dirname))):
         clean_dirs(dirs)
-        for fname in [f for f in files if keep_file(f)]:
-            pth = os.path.join(root, fname).replace('\\', '/')
-            if pth.startswith('./'):
-                pth = pth[2:]
-            if any(p.startswith('.') for p in Path(pth).parts()):
+        for fname in files:
+            relpth = os.path.relpath(os.path.join(root, fname), dirname).replace('\\', '/')
+
+            parts = Path(relpth).parts()
+            if not keep_file(fname, relpth) or any(p.startswith('.') for p in parts):
                 continue
-            if relative:
-                p = os.path.relpath(pth, curdir)
-            else:
-                p = pth
-            yield md5(open(pth).read()).hexdigest(), p.replace('\\', '/')
+
+            pth = os.path.join(dirname, relpth)
+            yield md5(open(pth).read()).hexdigest(), relpth
 
 
-def main():
+def main():  # pragma: nocover
     p = argparse.ArgumentParser(add_help="Recursively list interesting files.")
     p.add_argument(
         'directory', nargs="?", default="",
@@ -86,5 +86,5 @@ def main():
         print chsm, fname
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: nocover
     main()
