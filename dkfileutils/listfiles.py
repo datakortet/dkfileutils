@@ -21,7 +21,7 @@ def read_skipfile(dirname='.', defaults=None):
 
 
 def list_files(dirname='.', curdir=".", relative=True):
-    print "LISTFILES:", dirname, curdir, relative, str(dirname)
+    # print "LISTFILES:", dirname, curdir, relative, str(dirname)
     skipdirs = ['__pycache__', '.git', '.svn', 'htmlcov', 'dist', 'build',
                 '.idea', 'tasks', 'static', 'media', 'data', 'migrations',
                 '.doctrees', '_static', 'node_modules', 'external',
@@ -30,8 +30,9 @@ def list_files(dirname='.', curdir=".", relative=True):
     skipexts = ['.pyc', '~', '.svg', '.txt', '.TTF', '.tmp', '.errmail',
                 '.email', '.bat', '.dll', '.exe', '.Dll', '.jpg', '.gif',
                 '.png', '.ico', '.db', '.md5']
-    skipfiles = read_skipfile(str(dirname))
-    print "SKIPFILES:", skipfiles
+    dirname = str(dirname)
+    skipfiles = read_skipfile(dirname)
+    # print "SKIPFILES:", skipfiles
 
     def clean_dirs(dirs):
         for d in dirs:
@@ -51,7 +52,7 @@ def list_files(dirname='.', curdir=".", relative=True):
                 return False
         return True
 
-    for root, dirs, files in os.walk(os.path.abspath(str(dirname))):
+    for root, dirs, files in os.walk(os.path.abspath(dirname)):
         clean_dirs(dirs)
         for fname in files:
             relpth = os.path.relpath(os.path.join(root, fname), dirname).replace('\\', '/')
