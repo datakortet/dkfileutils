@@ -14,11 +14,11 @@ def digest(dirname):
     md5 = hashlib.md5()
     fnames = [fname for _, fname in list_files(Path(dirname))]
     for fname in sorted(fnames):
-        md5.update(open(fname, 'rb').read())
+        md5.update(open(os.path.join(dirname,  fname), 'rb').read())
     return md5.hexdigest()
 
 
-def changed(dirname, filename='.md5', args=None):
+def changed(dirname, glob='**/*', filename='.md5', args=None):
     """Has `glob` changed in `dirname`
 
     Args:
