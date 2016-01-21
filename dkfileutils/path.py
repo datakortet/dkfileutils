@@ -227,7 +227,7 @@ class Path(str):
         """Return all direct descendands of directory `self` for which
            `filterfn` returns True.
         """
-        return [self/p for p in self.listdir() if filterfn(self/p)]
+        return [self / p for p in self.listdir() if filterfn(self / p)]
 
     def subdirs(self):
         """Return all direct sub-directories.
