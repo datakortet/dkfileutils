@@ -129,7 +129,8 @@ def test_chmod():
     """
     with create_files(files) as _root:
         root = path.Path(_root)
-        (root / 'a').chmod(stat.S_IREAD)
+        (root / 'a').chmod(00400)  # only read for only current user
+        # (root / 'a').chmod(stat.S_IREAD)
         with pytest.raises(OSError):
             (root / 'a').unlink()
         assert root.listdir() == ['a']
