@@ -45,6 +45,11 @@ def changed(dirname, glob='**/*', filename='.md5', args=None):
     return has_changed
 
 
+class Directory(Path):
+    def changed(self, glob='**/*', filename='.md5', force=False):
+        return changed(self, glob, filename)
+
+
 def main():  # pragma: nocover
     p = argparse.ArgumentParser()
     p.add_argument(

@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 import glob
 import os
+import stat
+
+import time
+
+import pytest
+
 from dkfileutils import path
 from yamldirs import create_files
 
@@ -45,6 +51,91 @@ def test_contains():
         assert 'a' in root
         assert 'b' in root
         assert 'c' not in root
+
+
+def test_dirops():
+    files = """
+        - a:
+            - b
+            - c
+        - d:
+            - empty
+        - e:
+            - f:
+                - g:
+                    - empty
+    """
+    with create_files(files) as directory:
+        p = path.Path(directory)
+        (p / 'a').chdir()
+        assert set(os.listdir(p / 'a')) == {'b', 'c'}
+
+        (p / 'd').rmdir()
+        assert set(os.listdir(p)) == {'a', 'e'}
+
+        (p / 'e' / 'f' / 'g').removedirs()
+        assert set(os.listdir(p)) == {'a'}
+
+
+def test_rename():
+    files = """
+        a
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert os.listdir(root) == ['a']
+        (root / 'a').rename('b')
+        assert os.listdir(root) == ['b']
+
+
+def test_renames():
+    files = """
+    - foo:
+        - a:
+            - b
+            - c
+        - d:
+            - empty
+        - e:
+            - f:
+                - g: |
+                    hello world
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        (root / 'foo').renames('bar')
+        newfiles = [f.relpath(root).replace('\\', '/') for f in root.glob('**/*')]
+        print newfiles
+        assert 'bar/a/b' in newfiles
+        assert 'bar/a/c' in newfiles
+        assert 'bar/e/f/g' in newfiles
+        assert 'bar/d' not in newfiles
+
+
+def test_utime():
+    files = """
+        a
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        t = time.time()
+        stat = root.utime()
+        assert abs(stat.st_atime - t) < 1
+
+
+def test_chmod():
+    files = """
+        a
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        (root / 'a').chmod(stat.S_IREAD)
+        with pytest.raises(OSError):
+            (root / 'a').unlink()
+        assert root.listdir() == ['a']
+        (root / 'a').chmod(stat.S_IWRITE)
+        (root / 'a').unlink()
+        assert root.listdir() == []
 
 
 def test_unlink():

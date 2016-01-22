@@ -4,6 +4,7 @@ import os
 from hashlib import md5
 from yamldirs import create_files
 from dkfileutils import changed
+from dkfileutils.changed import Directory
 
 
 def test_empty_digest():
@@ -11,8 +12,9 @@ def test_empty_digest():
         emptydir:
             - empty
     """
-    with create_files(files) as emptydir:
-        assert changed.digest(emptydir) == md5("").hexdigest()
+    with create_files(files) as directory:
+        os.chdir(directory)
+        assert changed.digest('emptydir') == md5("").hexdigest()
 
 
 def test_changed():
@@ -20,8 +22,9 @@ def test_changed():
         emptydir:
             - empty
     """
-    with create_files(files) as emptydir:
-        assert changed.changed(emptydir)
+    with create_files(files) as directory:
+        os.chdir(directory)
+        assert changed.changed('emptydir')
 
 
 def test_missing():
@@ -36,5 +39,7 @@ def test_multifiles():
             - c: |
                 world
     """
-    with create_files(files) as a:
-        assert changed.changed(a)
+    with create_files(files) as directory:
+        os.chdir(directory)
+        assert changed.changed('a')
+        assert not Directory('a').changed()

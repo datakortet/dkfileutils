@@ -10,8 +10,8 @@ print "BSDIR:", BASEDIR
 print "cwd:", os.getcwd()
 
 
-def _files(fit):
-    return [y for x,y in fit]
+# def _files(fit):
+#     return [y for x, y in fit]
 
 
 def test_skipfile():
@@ -42,3 +42,23 @@ def test_skippy():
         ]
 
         assert [fname for _hex, fname in list_files(os.path.join(root, '.dotdir'), root)] == []
+
+
+def test_dot_path():
+    files = """
+        - a:
+            - .skipfile: |
+                b/.c/d/e
+            - b:
+                - .c:
+                    - d:
+                        - e: |
+                            hello
+                        - f: |
+                            world
+            - g
+    """
+    print "test_dot_path"
+    with create_files(files) as directory:
+        os.chdir(directory)
+        assert [fname for _hex, fname in list_files('a', directory)] == ['g']

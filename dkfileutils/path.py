@@ -278,7 +278,7 @@ class Path(str):
     def rmdir(self):
         return os.rmdir(self)
 
-    if hasattr(os, 'startfile'):
+    if hasattr(os, 'startfile'):  # pragma: nocover
         @doc(os.startfile)
         def startfile(self, *args, **kw):
             return os.startfile(self, *args, **kw)
@@ -288,12 +288,6 @@ class Path(str):
         return os.stat(self, *args, **kw)
 
     @doc(os.utime)
-    def utime(self, *args, **kw):
-        return os.utime(self, *args, **kw)
-
-    # def __getattr__(self, attr):
-    # if hasattr(os.path, attr):
-    #         a = getattr(os.path, attr)
-    #         if inspect.isfunction(a):
-    #             return lambda *args, **kwargs: a(self, *args, **kwargs)
-    #     raise AttributeError(attr)
+    def utime(self, time=None):
+        os.utime(self, time)
+        return self.stat()

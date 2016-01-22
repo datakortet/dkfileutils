@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-"""
 import argparse
 import os
 from hashlib import md5
@@ -21,7 +19,6 @@ def read_skipfile(dirname='.', defaults=None):
 
 
 def list_files(dirname='.', curdir=".", relative=True):
-    # print "LISTFILES:", dirname, curdir, relative, str(dirname)
     skipdirs = ['__pycache__', '.git', '.svn', 'htmlcov', 'dist', 'build',
                 '.idea', 'tasks', 'static', 'media', 'data', 'migrations',
                 '.doctrees', '_static', 'node_modules', 'external',
@@ -32,23 +29,22 @@ def list_files(dirname='.', curdir=".", relative=True):
                 '.png', '.ico', '.db', '.md5']
     dirname = str(dirname)
     skipfiles = read_skipfile(dirname)
-    # print "SKIPFILES:", skipfiles
 
-    def clean_dirs(dirs):
-        for d in dirs:
+    def clean_dirs(directories):
+        for d in directories:
             if d.endswith('.egg-info'):
-                dirs.remove(d)
+                directories.remove(d)
         for d in skipdirs:
-            if d in dirs:
-                dirs.remove(d)
+            if d in directories:
+                directories.remove(d)
 
-    def keep_file(fname, pth):
-        if fname.startswith('.'):
+    def keep_file(filename, filepath):
+        if filename.startswith('.'):
             return False
-        if pth in skipfiles:
+        if filepath in skipfiles:
             return False
         for ext in skipexts:
-            if fname.endswith(ext):
+            if filename.endswith(ext):
                 return False
         return True
 
