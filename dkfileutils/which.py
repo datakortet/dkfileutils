@@ -8,7 +8,9 @@ from stat import ST_MODE, S_IXUSR, S_IXGRP, S_IXOTH
 
 
 def get_executable(name):
-    return list(which(name))[0]
+    for result in which(name)):
+        return result
+    return None
 
 
 def get_path_directories():
