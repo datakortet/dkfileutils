@@ -8,7 +8,7 @@ from stat import ST_MODE, S_IXUSR, S_IXGRP, S_IXOTH
 
 
 def get_executable(name):
-    for result in which(name)):
+    for result in which(name):
         return result
     return None
 
