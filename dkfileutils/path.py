@@ -244,8 +244,8 @@ class Path(str):
         return os.lstat(self)
 
     @doc(os.makedirs)
-    def makedirs(self, path, mode=0777):
-        pth = os.path.join(self, path)
+    def makedirs(self, path=None, mode=0777):
+        pth = os.path.join(self, path) if path else self
         try:
             os.makedirs(pth, mode)
         except OSError:
