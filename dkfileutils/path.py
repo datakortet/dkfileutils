@@ -8,6 +8,7 @@
 # R0904: too many public methods in Path
 import os
 import re
+from contextlib import contextmanager
 
 
 def doc(srcfn):
@@ -214,6 +215,15 @@ class Path(str):
     @doc(os.chdir)
     def chdir(self):
         return os.chdir(self)
+
+    @contextmanager
+    def cd(self):
+        cwd = os.getcwd()
+        try:
+            self.chdir()
+            yield self
+        finally:
+            os.chdir(cwd)
 
     @doc(os.chmod)
     def chmod(self, *args, **kw):
