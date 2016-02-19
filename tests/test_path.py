@@ -59,12 +59,10 @@ def test_dirops():
         - a:
             - b
             - c
-        - d:
-            - empty
+        - d: []
         - e:
             - f:
-                - g:
-                    - empty
+                - g: []
     """
     with create_files(files) as directory:
         p = path.Path(directory)
@@ -216,6 +214,7 @@ def test_files():
     """
     with create_files(files) as _root:
         root = path.Path(_root)
+        print "LISTDIR:", os.listdir('.')
         assert [d.relpath(root) for d in root.files()] == ['a.py', 'd', 'f']
 
 
