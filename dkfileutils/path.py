@@ -23,7 +23,13 @@ class Path(str):
     """
 
     def __div__(self, other):
-        return Path(os.path.join(self, other))
+        return Path(
+            os.path.normcase(
+                os.path.normpath(
+                    os.path.join(self, other)
+                )
+            )
+        )
 
     @doc(os.unlink)
     def unlink(self):
