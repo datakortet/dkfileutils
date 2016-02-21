@@ -190,7 +190,12 @@ class Path(str):
         return Path(os.path.relpath(str(self), str(other)))
 
     @doc(os.path.split)
-    def split(self, **kwargs):
+    def split(self, sep=None, maxsplit=None):
+        # some heuristics to determine if this is a str.split call or
+        # a os.split call...
+        sval = str(self)
+        if sep is not None or ' ' in sval:
+            return sval.split(sep, maxsplit)
         return os.path.split(self)
 
     def parts(self):

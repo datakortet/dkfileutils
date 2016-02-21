@@ -15,7 +15,7 @@ opjoin = os.path.join
 
 
 def _relcontent(root):
-    return [p.relpath(root) for p in root]
+    return {p.relpath(root) for p in root}
 
 
 def test_open():
@@ -39,7 +39,7 @@ def test_iter():
     """
     with create_files(files) as _root:
         root = path.Path(_root)
-        assert _relcontent(root) == ['a', 'b', opjoin('c', 'd')]
+        assert _relcontent(root) == {'a', 'b', opjoin('c', 'd')}
 
 
 def test_contains():
@@ -148,7 +148,7 @@ def test_unlink():
     """
     with create_files(files) as _root:
         root = path.Path(_root)
-        assert [p.relpath(root) for p in root] == ['a', 'b']
+        assert {p.relpath(root) for p in root} == {'a', 'b'}
 
         b = root / 'b'
         b.unlink()
@@ -215,7 +215,9 @@ def test_files():
     with create_files(files) as _root:
         root = path.Path(_root)
         print "LISTDIR:", os.listdir('.')
-        assert [d.relpath(root) for d in root.files()] == ['a.py', 'd', 'f']
+        assert {d.relpath(root) for d in root.files()} == {
+            'a.py', 'd', 'f'
+        }
 
 
 def test_makedirs():
