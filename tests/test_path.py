@@ -381,6 +381,7 @@ def test_relpath():
 
 def test_split():
     assert os.path.split('empty') == path.Path('empty').split()
+    assert 'string variable'.split() == path.Path('string variable').split()
 
 
 def test_splitdrive():
@@ -405,6 +406,19 @@ def test_lstat():
 
 def test_stat():
     assert os.stat(__file__) == path.Path(__file__).stat()
+
+
+def test_cd_contextmanager():
+    files = """
+        a:
+          - b
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert 'a' in os.listdir('.')
+        with (root/'a').cd():
+            assert 'b' in os.listdir('.')
+        assert 'a' in os.listdir('.')
 
 
 # def test_utime():

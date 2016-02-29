@@ -9,21 +9,17 @@ from dkfileutils.changed import Directory
 
 def test_empty_digest():
     files = """
-        emptydir:
-            - empty
+        emptydir: []
     """
     with create_files(files) as directory:
-        os.chdir(directory)
         assert changed.digest('emptydir') == md5("").hexdigest()
 
 
 def test_changed():
     files = """
-        emptydir:
-            - empty
+        emptydir: []
     """
     with create_files(files) as directory:
-        os.chdir(directory)
         assert changed.changed('emptydir')
 
 
@@ -40,6 +36,5 @@ def test_multifiles():
                 world
     """
     with create_files(files) as directory:
-        os.chdir(directory)
         assert changed.changed('a')
         assert not Directory('a').changed()

@@ -190,12 +190,12 @@ class Path(str):
         return Path(os.path.relpath(str(self), str(other)))
 
     @doc(os.path.split)
-    def split(self, sep=None, maxsplit=None):
+    def split(self, sep=None, maxsplit=-1):
         # some heuristics to determine if this is a str.split call or
         # a os.split call...
         sval = str(self)
         if sep is not None or ' ' in sval:
-            return sval.split(sep, maxsplit)
+            return sval.split(sep or ' ', maxsplit)
         return os.path.split(self)
 
     def parts(self):
@@ -312,3 +312,6 @@ class Path(str):
     def utime(self, time=None):
         os.utime(self, time)
         return self.stat()
+
+    def __add__(self, other):
+        return Path(str(self) + str(other))

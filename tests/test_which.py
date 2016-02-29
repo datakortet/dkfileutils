@@ -10,3 +10,7 @@ def test_which():
 
 def test_get_executable():
     assert which.get_executable('find')
+
+
+def test_missing_executable():
+    assert not which.get_executable('chewbaccascousin')
