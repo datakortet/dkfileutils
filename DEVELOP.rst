@@ -28,6 +28,7 @@ Verify that everything is copacetic::
 Tag the release (replace 1.2.3 with the new version number)::
 
     git tag -a v1.2.3 -m "Version 1.2.3"
+    git push origin --tags
 
 then push to PyPi::
 
