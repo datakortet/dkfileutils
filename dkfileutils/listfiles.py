@@ -8,6 +8,10 @@ SKIPFILE_NAME = '.skipfile'
 
 
 def read_skipfile(dirname='.', defaults=None):
+    """The .skipfile should contain one entry per line,
+       listing files/directories that should be skipped by
+       :func:`list_files`.
+    """
     if defaults is None:
         defaults = ['Makefile', 'make.bat', 'atlassian-ide-plugin.xml']
     try:
@@ -19,6 +23,10 @@ def read_skipfile(dirname='.', defaults=None):
 
 
 def list_files(dirname='.', curdir=".", relative=True):
+    """Yield (digest, fname) tuples for all interesting files
+       in `dirname`.  The file names are relative to `curdir`
+       unless otherwise specified.
+    """
     skipdirs = ['__pycache__', '.git', '.svn', 'htmlcov', 'dist', 'build',
                 '.idea', 'tasks', 'static', 'media', 'data', 'migrations',
                 '.doctrees', '_static', 'node_modules', 'external',

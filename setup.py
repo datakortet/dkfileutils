@@ -45,6 +45,7 @@ setup(
     version=version,
     author='Bjorn Pettersen',
     author_email='bp@datakortet.no',
+    url='https://github.com/datakortet/dkfileutils/',
     requires=[],
     install_requires=[],
     description=__doc__.strip(),

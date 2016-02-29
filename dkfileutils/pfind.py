@@ -1,6 +1,6 @@
 #!/usr/bin/python
-"""`pfind path filename` find the closest ancestor directory conataining
-   filename (used for finding syncspec.txt and config files).
+"""CLI usage: ``pfind path filename`` will find the closest ancestor directory
+   conataining filename (used for finding syncspec.txt and config files).
 """
 import os
 import sys

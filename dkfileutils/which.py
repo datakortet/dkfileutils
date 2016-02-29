@@ -8,12 +8,16 @@ from stat import ST_MODE, S_IXUSR, S_IXGRP, S_IXOTH
 
 
 def get_executable(name):
+    """Return the first executable on the path that matches `name`.
+    """
     for result in which(name):
         return result
     return None
 
 
 def get_path_directories():
+    """Return a list of all the directories on the path.
+    """
     pth = os.environ['PATH']
     if sys.platform == 'win32' and os.environ.get("BASH"):
         # winbash has a bug..
@@ -23,10 +27,14 @@ def get_path_directories():
 
 
 def is_executable(fname):
+    """Check if a file is executable.
+    """
     return os.stat(fname)[ST_MODE] & (S_IXUSR | S_IXGRP | S_IXOTH)
 
 
 def which(filename, interactive=False, verbose=False):
+    """Yield all executable files on path that matches `filename`.
+    """
     exe = os.environ.get('PATHEXT', ['.cmd', '.bat', '.exe', '.com'])
 
     name, ext = os.path.splitext(filename)

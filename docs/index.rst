@@ -51,6 +51,13 @@ pfind
    :undoc-members:
 
 
+which
+------------------------------------------------
+
+.. automodule:: dkfileutils.which
+   :members:
+   :undoc-members:
+
 
 Indices and tables
 ==================

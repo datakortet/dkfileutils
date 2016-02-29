@@ -4,27 +4,34 @@ Developing dkfileutils
 ======================
 
 .. note:: if you're using this as a template for new projects, remember to
-          `python setup.py register <projectname>` before you upload to 
+          ``python setup.py register <projectname>`` before you upload to
           PyPi.
 
 Uploading to PyPI
 -----------------
+This requires pyinvoke (``pip install invoke``) and dk-tasklib
+(``pip install dk-tasklib``). These are not listed as requirements.
 
-- only source distribution::
+Create a new version::
 
-    python setup.py sdist upload
+    inv upversion
 
-- source and windows installer::
+Check in new version numbers:
 
-    python setup.py sdist bdist_wininst upload
+    git add ...
+    git commit ...
 
-- source, windows, and wheel installer::
+Verify that everything is copacetic::
 
-    python setup.py sdist bdist_wininst bdist_wheel upload
+    inv publish
 
-- create a documentation bundle to upload to PyPi::
+Tag the release (replace 1.2.3 with the new version number)::
 
-    cd build/sphinx/html && zip -r ../../../pypi-docs.zip *
+    git tag -a v1.2.3 -m "Version 1.2.3"
+
+then push to PyPi::
+
+    inv publish -f
 
 
 Running tests
@@ -33,12 +40,10 @@ One of::
 
     python setup.py test
     py.test dkfileutils
-    python runtests.py
 
 with coverage (one of)::
 
     py.test --cov=.
-    python runtests.py --cov=.
     coverage run runtests.py && coverage report
 
 
@@ -48,3 +53,4 @@ Building documentation
 ::
 
     python setup.py build_sphinx
+
