@@ -9,6 +9,7 @@
 import os
 import re
 from contextlib import contextmanager
+import shutil
 
 
 def doc(srcfn):
@@ -53,6 +54,10 @@ class Path(str):
         if self.isdir():
             return item in self.listdir()
         super(Path, self).__contains__(item)
+
+    @doc(shutil.rmtree)
+    def rmtree(self):
+        shutil.rmtree(self)
 
     def glob(self, pat):
         """`pat` can be an extended glob pattern, e.g. `'**/*.less'`
