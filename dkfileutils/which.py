@@ -50,7 +50,7 @@ def which(filename, interactive=False, verbose=False):
 
             fn_name, fn_ext = os.path.splitext(fname)
             if name == fn_name:
-                for suffix in exe:
+                for suffix in exe:  # pragma: nocover
                     if name + fn_ext == fname:
                         res.add(fname)
 
