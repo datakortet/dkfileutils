@@ -54,6 +54,47 @@ def test_contains():
         assert 'c' not in root
 
 
+def test_rmtree():
+    files = """
+        a:
+            b:
+                c:
+                    d.txt: hello world
+        e:
+            f.txt: thanks for all the fish
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        print "FILES:", root.contents()
+        # print "LISTALL:", root.listall()
+        (root / 'a').rmtree('b')
+        assert root.contents() == [path.Path('e') / 'f.txt']
+        (root / 'e').rmtree()
+        assert root.contents() == []
+
+
+def test_parents():
+    files = """
+        a:
+            b:
+                c:
+                    d.txt: hello world
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        d = root / 'a' / 'b' / 'c' / 'd.txt'
+        assert d.open().read() == "hello world"
+        print "PARTS:", d.parts()
+        print "PARENTS:", d.parents
+        assert d.parents == [
+            root / 'a' / 'b' / 'c',
+            root / 'a' / 'b',
+            root / 'a',
+            root
+        ] + root.parents
+        assert d.parent == root / 'a' / 'b' / 'c'
+
+
 def test_dirops():
     files = """
         - a:

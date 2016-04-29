@@ -56,8 +56,14 @@ class Path(str):
         super(Path, self).__contains__(item)
 
     @doc(shutil.rmtree)
-    def rmtree(self):
-        shutil.rmtree(self)
+    def rmtree(self, subdir=None):
+        if subdir is not None:
+            shutil.rmtree(self / subdir)
+        else:
+            shutil.rmtree(self)
+
+    def contents(self):
+        return [d.relpath(self) for d in self.glob('**/*')]
 
     def glob(self, pat):
         """`pat` can be an extended glob pattern, e.g. `'**/*.less'`
@@ -99,6 +105,7 @@ class Path(str):
     @doc(os.path.abspath)
     def abspath(self):
         return Path(os.path.abspath(self))
+    absolute = abspath  # pathlib
 
     def drive(self):
         """Return the drive of `self`.
@@ -204,7 +211,23 @@ class Path(str):
         return os.path.split(self)
 
     def parts(self):
-        return re.split(r"\\|/", self)
+        res = re.split(r"\\|/", self)
+        if res and os.path.splitdrive(res[0]) == (res[0], ''):
+            res[0] += os.path.sep
+        return res
+
+    def parent_iter(self):
+        parts = self.abspath().normpath().normcase().parts()
+        for i in range(1, len(parts)):
+            yield Path(os.path.join(*parts[:-i]))
+
+    @property
+    def parents(self):
+        return list(self.parent_iter())
+
+    @property
+    def parent(self):
+        return self.parents[0]
 
     @doc(os.path.splitdrive)
     def splitdrive(self):
