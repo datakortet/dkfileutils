@@ -6,7 +6,7 @@
 import sys
 
 classifiers = """\
-Development Status :: 3 - Alpha
+Development Status :: 5 - Production/Stable
 Intended Audience :: Developers
 Programming Language :: Python
 Programming Language :: Python :: 2
@@ -18,7 +18,7 @@ import setuptools
 from distutils.core import setup, Command
 from setuptools.command.test import test as TestCommand
 
-version = '1.1.2'
+version = '1.1.5'
 
 
 class PyTest(TestCommand):

@@ -1,15 +1,13 @@
 
-.. image:: https://travis-ci.org/datakortet/dkfileutils.svg?branch=master
-    :target: https://travis-ci.org/datakortet/dkfileutils
+dkfileutils -- file and directory utilities
+===========================================
 
+.. image:: https://travis-ci.org/datakortet/dkfileutils.svg?branch=master
+   :target: https://travis-ci.org/datakortet/dkfileutils
 
 .. image:: https://coveralls.io/repos/datakortet/dkfileutils/badge.svg?branch=master&service=github
-  :target: https://coveralls.io/github/datakortet/dkfileutils?branch=master
+   :target: https://coveralls.io/github/datakortet/dkfileutils?branch=master
 
-
-
-dkfileutils -- file and directory utilities
-==================================================
 
 Documentation: http://pythonhosted.org/dkfileutils/
 
@@ -30,10 +28,10 @@ unless otherwise specified.
 
 path
 ~~~~
-"Poor man's pathlib".  Object-oriented wrapper around :func:`os.path` and
-friends.  Similar to the Python 3 :mod:`pathlib`, however paths are
-:type:`str` subclasses and thus much easier to use in an environment
-where :func:`os.path` calls are interspersed with object-oriented code.
+"Poor man's pathlib".  Object-oriented wrapper around `os.path` and
+friends.  Similar to the Python 3 `pathlib`, however paths are
+`str` subclasses and thus much easier to use in an environment
+where `os.path` calls are interspersed with object-oriented code.
 
 pfind
 ~~~~~

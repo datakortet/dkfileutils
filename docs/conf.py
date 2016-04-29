@@ -48,7 +48,7 @@ copyright = u'2015 Bjorn Pettersen'
 # built documents.
 #
 # The short X.Y version.
-version = '1.1.2'
+version = '1.1.5'
 # The full version, including alpha/beta/rc tags.
 release = version
 
