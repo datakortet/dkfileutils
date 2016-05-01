@@ -63,7 +63,9 @@ class Path(str):
             shutil.rmtree(self)
 
     def contents(self):
-        return [d.relpath(self) for d in self.glob('**/*')]
+        res = [d.relpath(self) for d in self.glob('**/*')]
+        res.sort()
+        return res
 
     def glob(self, pat):
         """`pat` can be an extended glob pattern, e.g. `'**/*.less'`
