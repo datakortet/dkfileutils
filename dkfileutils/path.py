@@ -345,3 +345,13 @@ class Path(str):
 
     def __add__(self, other):
         return Path(str(self) + str(other))
+
+
+@contextmanager
+def cd(pth):
+    cwd = os.getcwd()
+    try:
+        os.chdir(pth)
+        yield
+    finally:
+        os.chdir(cwd)
