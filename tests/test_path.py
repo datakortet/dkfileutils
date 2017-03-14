@@ -112,6 +112,7 @@ def test_touch_existing():
         assert before <= a_before_touch <= after
         a.touch()
         a_after_touch = a.getmtime()
+        print "LOCALS:", locals()
         assert a_after_touch > after
         assert a_before_touch < a_after_touch
 
