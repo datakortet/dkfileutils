@@ -108,9 +108,12 @@ def test_touch_existing():
         print "FILES:", root.contents()
         assert 'a' in root
         a = root / 'a'
-        assert before <= a.getmtime() <= after
+        a_before_touch = a.getmtime()
+        assert before <= a_before_touch <= after
         a.touch()
-        assert a.getmtime() > after
+        a_after_touch = a.getmtime()
+        assert a_after_touch > after
+        assert a_before_touch < a_after_touch
 
 
 def test_touch_new():

@@ -67,11 +67,26 @@ class Path(str):
         res.sort()
         return res
 
-    @doc(os.utime)
-    def touch(self, times=None):
-        # Cf. http://stackoverflow.com/questions/1158076/implement-touch-using-python
-        with open(self, 'a'):
-            os.utime(self, times)
+    def touch(self, mode=0o666, exist_ok=True):
+        """Create this file with the given access mode, if it doesn't exist.
+           (based on https://github.com/python/cpython/blob/master/Lib/pathlib.py)
+        """
+        if exist_ok:
+            # First try to bump modification time
+            # Implementation note: GNU touch uses the UTIME_NOW option of
+            # the utimensat() / futimens() functions.
+            try:
+                os.utime(self, None)
+            except OSError:
+                # Avoid exception chaining
+                pass
+            else:
+                return
+        flags = os.O_CREAT | os.O_WRONLY
+        if not exist_ok:
+            flags |= os.O_EXCL
+        fd = os.open(self, flags, mode)
+        os.close(fd)
 
     def glob(self, pat):
         """`pat` can be an extended glob pattern, e.g. `'**/*.less'`
