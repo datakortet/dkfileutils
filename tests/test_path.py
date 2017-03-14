@@ -111,10 +111,23 @@ def test_touch_existing():
         a_before_touch = a.getmtime()
         assert before <= a_before_touch <= after
         a.touch()
+        after_touch = time.time()
         a_after_touch = a.getmtime()
         print "LOCALS:", locals()
-        assert a_after_touch > after
         assert a_before_touch < a_after_touch
+        assert a_after_touch > after
+        assert a_after_touch <= after_touch
+
+
+def test_touch_not_exist():
+    files = """
+        a: hello
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        a = root / 'a'
+        with pytest.raises(OSError):
+            a.touch(exist_ok=False)
 
 
 def test_touch_new():
