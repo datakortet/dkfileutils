@@ -67,6 +67,12 @@ class Path(str):
         res.sort()
         return res
 
+    @doc(os.utime)
+    def touch(self, times=None):
+        # Cf. http://stackoverflow.com/questions/1158076/implement-touch-using-python
+        with open(self, 'a'):
+            os.utime(self, times)
+
     def glob(self, pat):
         """`pat` can be an extended glob pattern, e.g. `'**/*.less'`
            This code handles negations similarly to node.js' minimatch, i.e.

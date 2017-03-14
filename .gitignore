@@ -52,11 +52,8 @@ docs/_build/
 
 # PyBuilder
 target/
-*.py~
-*.rst~
 
 .idea/
 
-*.ini~
+*~
 .md5
-.runlog-cd-c-srv-lib-django-media-tree-git-pull-pip-install-e-c-srv-lib-django-media-tree-no-deps-2016-11-18T12_49_18.769000.txt

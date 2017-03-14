@@ -11,6 +11,8 @@ import sys
 from dkfileutils import path
 from yamldirs import create_files
 
+from dkfileutils.path import cd
+
 opjoin = os.path.join
 
 
@@ -72,6 +74,58 @@ def test_rmtree():
         (root / 'e').rmtree()
         assert root.contents() == []
 
+
+def test_touch_existing():
+    # needs enough files that it takes a perceivable amount of time to create
+    # them
+    files = """
+        a: hello
+        b: beautiful
+        c: world
+        d:
+            a: hello
+            b: beautiful
+            c: world
+            d:
+                a: hello
+                b: beautiful
+                c: world
+                d:
+                    a: hello
+                    b: beautiful
+                    c: world
+                    d:
+                        a: hello
+                        b: beautiful
+                        c: world
+    """
+    before = time.time()
+    with create_files(files) as _root:
+        after = time.time()
+        assert before < after
+        print 'before/after', before, after, after-before
+        root = path.Path(_root)
+        print "FILES:", root.contents()
+        assert 'a' in root
+        a = root / 'a'
+        assert before <= a.getmtime() <= after
+        a.touch()
+        assert a.getmtime() > after
+
+
+def test_touch_new():
+    files = """
+        a: hello
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert 'a' in root
+        assert 'b' not in root
+        b = root / 'b'
+        assert not b.exists()
+        b.touch()
+        assert b.exists()
+        assert 'b' in root
 
 def test_parents():
     files = """
@@ -449,7 +503,7 @@ def test_stat():
     assert os.stat(__file__) == path.Path(__file__).stat()
 
 
-def test_cd_contextmanager():
+def test_cd():
     files = """
         a:
           - b
@@ -462,5 +516,14 @@ def test_cd_contextmanager():
         assert 'a' in os.listdir('.')
 
 
-# def test_utime():
-#     assert os.utime('empty') == path.Path('empty').utime()
+def test_cd_contextmanager():
+    files = """
+        a:
+          - b
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert 'a' in os.listdir('.')
+        with cd('a'):
+            assert 'b' in os.listdir('.')
+        assert 'a' in os.listdir('.')
