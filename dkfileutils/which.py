@@ -23,7 +23,7 @@ def get_path_directories():
         # winbash has a bug..
         if pth[1] == ';':  # pragma: nocover
             pth = pth.replace(';', ':', 1)
-    return pth.split(os.pathsep)
+    return [p.strip() for p in pth.split(os.pathsep) if p.strip()]
 
 
 def is_executable(fname):
@@ -32,10 +32,29 @@ def is_executable(fname):
     return os.stat(fname)[ST_MODE] & (S_IXUSR | S_IXGRP | S_IXOTH)
 
 
+def _noprint(*args, **kwargs):
+    """Don't print.
+    """
+    pass
+
+
+def _listdir(pth):
+    """Non-raising listdir."""
+    try:
+        return os.listdir(pth)
+    except:  # pragma: nocover
+        pass
+
+
+def _normalize(pth):
+    return os.path.normcase(os.path.normpath(pth))
+
+
 def which(filename, interactive=False, verbose=False):
     """Yield all executable files on path that matches `filename`.
     """
     exe = os.environ.get('PATHEXT', ['.cmd', '.bat', '.exe', '.com'])
+    writeln = print if verbose else _noprint
 
     name, ext = os.path.splitext(filename)
     if ext and (ext in exe):  # pragma: nocover
@@ -50,7 +69,7 @@ def which(filename, interactive=False, verbose=False):
 
             fn_name, fn_ext = os.path.splitext(fname)
             if name == fn_name:
-                for suffix in exe:  # pragma: nocover
+                for _suffix in exe:  # pragma: nocover
                     if name + fn_ext == fname:
                         res.add(fname)
 
@@ -59,27 +78,19 @@ def which(filename, interactive=False, verbose=False):
     returnset = set()
     found = False
     for pth in get_path_directories():
-        if not pth.strip():  # pragma: nocover
+        writeln('checking pth..')
+
+        fnames = _listdir(pth)
+        if not fnames:
             continue
 
-        if verbose:  # pragma: nocover
-            print('checking pth..')
-
-        try:
-            fnames = os.listdir(pth)
-        except:  # pragma: nocover
-            continue
-
-        matched = match(fnames)
-
-        if matched:
-            for m in matched:
-                found_file = os.path.normcase(os.path.normpath(os.path.join(pth, m)))
-                if found_file not in returnset:
-                    if is_executable(found_file):
-                        yield found_file
-                    returnset.add(found_file)
-            found = True
+        for m in match(fnames):
+            found_file = _normalize(os.path.join(pth, m))
+            if found_file not in returnset:
+                if is_executable(found_file):
+                    yield found_file
+                returnset.add(found_file)
+        found = True
 
     if not found and interactive:  # pragma: nocover
         print("Couldn't find %r anywhere on the path.." % filename)
