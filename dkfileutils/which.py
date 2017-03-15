@@ -32,7 +32,7 @@ def is_executable(fname):
     return os.stat(fname)[ST_MODE] & (S_IXUSR | S_IXGRP | S_IXOTH)
 
 
-def _noprint(*args, **kwargs):
+def _noprint(*_args, **_kwargs):
     """Don't print.
     """
     pass
@@ -42,7 +42,7 @@ def _listdir(pth):
     """Non-raising listdir."""
     try:
         return os.listdir(pth)
-    except:  # pragma: nocover
+    except OSError:  # pragma: nocover
         pass
 
 
@@ -69,7 +69,8 @@ def which(filename, interactive=False, verbose=False):
 
             fn_name, fn_ext = os.path.splitext(fname)
             if name == fn_name:
-                for _suffix in exe:  # pragma: nocover
+                for suffix in exe:  # pragma: nocover
+                    # if name + suffix == fname:
                     if name + fn_ext == fname:
                         res.add(fname)
 

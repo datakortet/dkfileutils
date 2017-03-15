@@ -22,10 +22,9 @@ def read_skipfile(dirname='.', defaults=None):
         return defaults
 
 
-def list_files(dirname='.', curdir=".", relative=True):
+def list_files(dirname='.'):
     """Yield (digest, fname) tuples for all interesting files
-       in `dirname`.  The file names are relative to `curdir`
-       unless otherwise specified.
+       in `dirname`.
     """
     skipdirs = ['__pycache__', '.git', '.svn', 'htmlcov', 'dist', 'build',
                 '.idea', 'tasks', 'static', 'media', 'data', 'migrations',
@@ -59,10 +58,14 @@ def list_files(dirname='.', curdir=".", relative=True):
     for root, dirs, files in os.walk(os.path.abspath(dirname)):
         clean_dirs(dirs)
         for fname in files:
-            relpth = os.path.relpath(os.path.join(root, fname), dirname).replace('\\', '/')
+            relpth = os.path.relpath(
+                os.path.join(root, fname),
+                dirname
+            ).replace('\\', '/')
 
             parts = Path(relpth).parts()
-            if not keep_file(fname, relpth) or any(p.startswith('.') for p in parts):
+            if not keep_file(fname, relpth) or \
+                    any(p.startswith('.') for p in parts):
                 continue
 
             pth = os.path.join(dirname, relpth)

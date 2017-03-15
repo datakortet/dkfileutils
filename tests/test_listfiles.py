@@ -33,11 +33,11 @@ def test_skippy():
             - e
     """
     with create_files(files) as root:
-        assert {fname for _hex, fname in list_files(root, root)} == {'a', 'b'}
+        assert {fname for _hex, fname in list_files(root)} == {'a', 'b'}
 
-        assert {fname for _hex, fname in list_files(root, root, False)} == {'a', 'b'}
+        assert {fname for _hex, fname in list_files(root)} == {'a', 'b'}
 
-        assert [fname for _hex, fname in list_files(os.path.join(root, '.dotdir'), root)] == []
+        assert [fname for _hex, fname in list_files(os.path.join(root, '.dotdir'))] == []
 
 
 def test_dot_path():
@@ -57,4 +57,4 @@ def test_dot_path():
     print "test_dot_path"
     with create_files(files) as directory:
         os.chdir(directory)
-        assert [fname for _hex, fname in list_files('a', directory)] == ['g']
+        assert [fname for _hex, fname in list_files('a')] == ['g']

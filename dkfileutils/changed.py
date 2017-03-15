@@ -18,7 +18,7 @@ def digest(dirname):
     return md5.hexdigest()
 
 
-def changed(dirname, glob='**/*', filename='.md5', args=None):
+def changed(dirname, filename='.md5', args=None):
     """Has `glob` changed in `dirname`
 
     Args:
@@ -46,8 +46,8 @@ def changed(dirname, glob='**/*', filename='.md5', args=None):
 
 
 class Directory(Path):
-    def changed(self, glob='**/*', filename='.md5', force=False):
-        return changed(self, glob, filename)
+    def changed(self, filename='.md5'):
+        return changed(self, filename)
 
 
 def main():  # pragma: nocover
