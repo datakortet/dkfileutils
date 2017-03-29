@@ -67,6 +67,12 @@ class Path(str):
         res.sort()
         return res
 
+    @classmethod
+    def curdir(cls):
+        """Initialize a Path object on the current directory.
+        """
+        return cls(os.getcwd())
+
     def touch(self, mode=0o666, exist_ok=True):
         """Create this file with the given access mode, if it doesn't exist.
            (based on https://github.com/python/cpython/blob/master/Lib/pathlib.py)
