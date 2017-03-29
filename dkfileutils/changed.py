@@ -8,17 +8,23 @@ from .listfiles import list_files
 from .path import Path
 
 
-def digest(dirname):
-    """Returns the md5 digest of all interesting files in `dirname`.
+def digest(dirname, glob=None):
+    """Returns the md5 digest of all interesting files (or glob) in `dirname`.
     """
     md5 = hashlib.md5()
-    fnames = [fname for _, fname in list_files(Path(dirname))]
-    for fname in sorted(fnames):
-        md5.update(open(os.path.join(dirname, fname), 'rb').read())
+    if glob is None:
+        fnames = [fname for _, fname in list_files(Path(dirname))]
+        for fname in sorted(fnames):
+            fname = os.path.join(dirname, fname)
+            md5.update(open(fname, 'rb').read())
+    else:
+        fnames = Path(dirname).glob(glob)
+        for fname in sorted(fnames):
+            md5.update(fname.open('rb').read())
     return md5.hexdigest()
 
 
-def changed(dirname, filename='.md5', args=None):
+def changed(dirname, filename='.md5', args=None, glob=None):
     """Has `glob` changed in `dirname`
 
     Args:
@@ -33,7 +39,7 @@ def changed(dirname, filename='.md5', args=None):
     cachefile = root / filename
     current_digest = cachefile.open().read() if cachefile.exists() else ""
     
-    _digest = digest(dirname)
+    _digest = digest(dirname, glob=glob)
     if args and args.verbose:  # pragma: nocover
         print "md5:", _digest
     has_changed = current_digest != _digest
@@ -46,8 +52,11 @@ def changed(dirname, filename='.md5', args=None):
 
 
 class Directory(Path):
-    def changed(self, filename='.md5'):
-        return changed(self, filename)
+    def changed(self, filename='.md5', glob=None):
+        if glob is not None:
+            filename += '.glob-' + ''.join(ch.lower()
+                                           for ch in glob if ch.isalpha())
+        return changed(self, filename, glob=glob)
 
 
 def main():  # pragma: nocover

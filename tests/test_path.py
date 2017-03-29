@@ -75,6 +75,10 @@ def test_rmtree():
         assert root.contents() == []
 
 
+def test_curdir():
+    assert path.Path.curdir() == os.getcwd()
+
+
 def test_touch_existing():
     # needs enough files that it takes a perceivable amount of time to create
     # them

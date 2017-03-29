@@ -39,6 +39,10 @@ class Path(str):
     def open(self, mode='r'):
         return open(self, mode)
 
+    def read(self, mode='r'):
+        with self.open(mode) as fp:
+            return fp.read()
+
     def __iter__(self):
         for root, dirs, files in os.walk(self):
             dotdirs = [d for d in dirs if d.startswith('.')]
