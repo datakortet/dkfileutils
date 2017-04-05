@@ -62,9 +62,9 @@ class Path(str):
     @doc(shutil.rmtree)
     def rmtree(self, subdir=None):
         if subdir is not None:
-            shutil.rmtree(self / subdir)
+            shutil.rmtree(self / subdir, ignore_errors=True)
         else:
-            shutil.rmtree(self)
+            shutil.rmtree(self, ignore_errors=True)
 
     def contents(self):
         res = [d.relpath(self) for d in self.glob('**/*')]
@@ -343,6 +343,15 @@ class Path(str):
     @doc(os.remove)
     def remove(self):
         return os.remove(self)
+
+    def rm(self, fname=None):
+        "Remove a file, don't raise exception if file does not exist."
+        if fname is not None:
+            return (self / fname).rm()
+        try:
+            self.remove()
+        except OSError:
+            pass
 
     @doc(os.removedirs)
     def removedirs(self):
