@@ -43,6 +43,14 @@ class Path(str):
         with self.open(mode) as fp:
             return fp.read()
 
+    def write(self, txt, mode='w'):
+        with self.open(mode) as fp:
+            fp.write(txt)
+
+    def append(self, txt, mode='a'):
+        with self.open(mode) as fp:
+            fp.write(txt)
+
     def __iter__(self):
         for root, dirs, files in os.walk(self):
             dotdirs = [d for d in dirs if d.startswith('.')]
