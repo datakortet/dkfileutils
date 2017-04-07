@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pytest
 
 from dkfileutils import which
 
@@ -14,3 +15,8 @@ def test_get_executable():
 
 def test_missing_executable():
     assert not which.get_executable('chewbaccascousin')
+
+
+def test_incorrect_extension():
+    with pytest.raises(ValueError):
+        which.get_executable('foo.bar')

@@ -32,16 +32,11 @@ def is_executable(fname):
     return os.stat(fname)[ST_MODE] & (S_IXUSR | S_IXGRP | S_IXOTH)
 
 
-def _noprint(*_args, **_kwargs):
-    """Don't print.
-    """
-    pass
-
-
-def _listdir(pth):
+def _listdir(pth, extensions):
     """Non-raising listdir."""
     try:
-        return os.listdir(pth)
+        return [fname for fname in os.listdir(pth)
+                if os.path.splitext(fname)[1] in extensions]
     except OSError:  # pragma: nocover
         pass
 
@@ -53,35 +48,35 @@ def _normalize(pth):
 def which(filename, interactive=False, verbose=False):
     """Yield all executable files on path that matches `filename`.
     """
-    exe = os.environ.get('PATHEXT', ['.cmd', '.bat', '.exe', '.com'])
-    writeln = print if verbose else _noprint
+    exe = [e.lower() for e in os.environ.get('PATHEXT', '').split(';')]
+    if sys.platform != 'win32':  # pragma: nocover
+        exe.append('')
 
     name, ext = os.path.splitext(filename)
-    if ext and (ext in exe):  # pragma: nocover
-        exe = []
+    has_extension = bool(ext)
+    if has_extension and ext.lower() not in exe:
+        raise ValueError("which can only search for executable files")
 
     def match(filenames):
+        """Returns the sorted subset of ``filenames`` that matches ``filename``.
+        """
         res = set()
         for fname in filenames:
             if fname == filename:  # pragma: nocover
-                res.add(fname)
+                res.add(fname)  # exact match
                 continue
-
-            fn_name, fn_ext = os.path.splitext(fname)
-            if name == fn_name:
-                for suffix in exe:  # pragma: nocover
-                    # if name + suffix == fname:
-                    if name + fn_ext == fname:
-                        res.add(fname)
-
+            fname_name, fname_ext = os.path.splitext(fname)
+            if fname_name == name and fname_ext.lower() in exe:
+                res.add(fname)
         return sorted(res)
 
     returnset = set()
     found = False
     for pth in get_path_directories():
-        writeln('checking pth..')
+        if verbose:  # pragma: nocover
+            print('checking pth..')
 
-        fnames = _listdir(pth)
+        fnames = _listdir(pth, exe)
         if not fnames:
             continue
 

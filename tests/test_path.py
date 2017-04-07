@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import glob
+from __future__ import print_function
 import os
 import stat
 
@@ -26,6 +26,39 @@ def test_open():
     """
     with create_files(files) as root:
         assert (path.Path(root) / 'b').open().read() == 'hello'
+
+
+def test_read():
+    files = """
+        b: hello
+    """
+    with create_files(files) as root:
+        assert (path.Path(root) / 'b').read() == 'hello'
+
+
+def test_write():
+    files = """
+        b: hello
+    """
+    with create_files(files) as root:
+        r = path.Path(root)
+        bfile = r / 'b'
+        bfile.write('goodbye')
+        assert bfile.read() == 'goodbye'
+        cfile = r / 'c'
+        cfile.write('world')
+        assert cfile.read() == 'world'
+
+
+def test_append():
+    files = """
+        b: hello
+    """
+    with create_files(files) as root:
+        r = path.Path(root)
+        bfile = r / 'b'
+        bfile.append(' world')
+        assert bfile.read() == 'hello world'
 
 
 def test_iter():
@@ -67,7 +100,7 @@ def test_rmtree():
     """
     with create_files(files) as _root:
         root = path.Path(_root)
-        print "FILES:", root.contents()
+        print("FILES:", root.contents())
         # print "LISTALL:", root.listall()
         (root / 'a').rmtree('b')
         assert root.contents() == [path.Path('e') / 'f.txt']
@@ -107,9 +140,9 @@ def test_touch_existing():
     with create_files(files) as _root:
         after = time.time()
         assert before < after
-        print 'before/after', before, after, after-before
+        print('before/after', before, after, after - before)
         root = path.Path(_root)
-        print "FILES:", root.contents()
+        print("FILES:", root.contents())
         assert 'a' in root
         a = root / 'a'
         a_before_touch = a.getmtime()
@@ -117,7 +150,7 @@ def test_touch_existing():
         a.touch()
         after_touch = time.time()
         a_after_touch = a.getmtime()
-        print "LOCALS:", locals()
+        print("LOCALS:", locals())
         assert a_before_touch <= a_after_touch
         # assert a_after_touch > after
         # assert a_after_touch <= after_touch
@@ -148,6 +181,7 @@ def test_touch_new():
         assert b.exists()
         assert 'b' in root
 
+
 def test_parents():
     files = """
         a:
@@ -159,8 +193,8 @@ def test_parents():
         root = path.Path(_root)
         d = root / 'a' / 'b' / 'c' / 'd.txt'
         assert d.open().read() == "hello world"
-        print "PARTS:", d.parts()
-        print "PARENTS:", d.parents
+        print("PARTS:", d.parts())
+        print("PARENTS:", d.parents)
         assert d.parents == [
             root / 'a' / 'b' / 'c',
             root / 'a' / 'b',
@@ -219,8 +253,9 @@ def test_renames():
     with create_files(files) as _root:
         root = path.Path(_root)
         (root / 'foo').renames('bar')
-        newfiles = [f.relpath(root).replace('\\', '/') for f in root.glob('**/*')]
-        print newfiles
+        newfiles = [f.relpath(root).replace('\\', '/')
+                    for f in root.glob('**/*')]
+        print(newfiles)
         assert 'bar/a/b' in newfiles
         assert 'bar/a/c' in newfiles
         assert 'bar/e/f/g' in newfiles
@@ -234,8 +269,8 @@ def test_utime():
     with create_files(files) as _root:
         root = path.Path(_root)
         t = time.time()
-        stat = root.utime()
-        assert abs(stat.st_atime - t) < 1
+        _stat = root.utime()
+        assert abs(_stat.st_atime - t) < 1
 
 
 def test_chmod():
@@ -244,7 +279,7 @@ def test_chmod():
     """
     with create_files(files) as _root:
         root = path.Path(_root)
-        (root / 'a').chmod(00400)  # only read for only current user
+        (root / 'a').chmod(0o0400)  # only read for only current user
         # (root / 'a').chmod(stat.S_IREAD)
         if sys.platform == 'win32':
             # doesn't appear to be any way for a user to create a file that he
@@ -272,6 +307,26 @@ def test_unlink():
 
         a = root / 'a'
         a.remove()
+        assert [p.relpath(root) for p in root] == []
+
+
+def test_rm():
+    files = """
+        - a
+        - b
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert {p.relpath(root) for p in root} == {'a', 'b'}
+
+        b = root / 'b'
+        b.rm()
+        assert [p.relpath(root) for p in root] == ['a']
+
+        root.rm('a')
+        assert [p.relpath(root) for p in root] == []
+
+        root.rm('c')  # shouldn't raise
         assert [p.relpath(root) for p in root] == []
 
 
@@ -330,7 +385,7 @@ def test_files():
     """
     with create_files(files) as _root:
         root = path.Path(_root)
-        print "LISTDIR:", os.listdir('.')
+        print("LISTDIR:", os.listdir('.'))
         assert {d.relpath(root) for d in root.files()} == {
             'a.py', 'd', 'f'
         }
@@ -370,9 +425,9 @@ def test_commonprefix():
         - f
     """
     with create_files(files) as _root:
-        root = path.Path(_root)
-        assert root.commonprefix(root) == root
-        assert root.commonprefix(root/'a.py', root/'d', root/'b'/'a.txt') == root
+        r = path.Path(_root)
+        assert r.commonprefix(r) == r
+        assert r.commonprefix(r/'a.py', r/'d', r/'b'/'a.txt') == r
 
 
 def test_abspath():
@@ -389,10 +444,6 @@ def test_drivepath():
 
 def test_basename():
     assert os.path.basename('empty') == path.Path('empty').basename()
-
-
-# def test_commonprefix():
-#     assert os.path.commonprefix('empty', 'empty') == path.Path('empty').commonprefix('empty')
 
 
 def test_dirname():
@@ -543,7 +594,7 @@ def test_cd_contextmanager():
           - b
     """
     with create_files(files) as _root:
-        root = path.Path(_root)
+        # root = path.Path(_root)
         assert 'a' in os.listdir('.')
         with cd('a'):
             assert 'b' in os.listdir('.')

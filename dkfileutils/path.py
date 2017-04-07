@@ -87,7 +87,10 @@ class Path(str):
 
     def touch(self, mode=0o666, exist_ok=True):
         """Create this file with the given access mode, if it doesn't exist.
-           (based on https://github.com/python/cpython/blob/master/Lib/pathlib.py)
+           Based on:
+            
+              https://github.com/python/cpython/blob/master/Lib/pathlib.py)
+              
         """
         if exist_ok:
             # First try to bump modification time
@@ -252,7 +255,7 @@ class Path(str):
         return os.path.split(self)
 
     def parts(self):
-        res = re.split(r"\\|/", self)
+        res = re.split(r"[\\/]", self)
         if res and os.path.splitdrive(res[0]) == (res[0], ''):
             res[0] += os.path.sep
         return res
@@ -309,15 +312,15 @@ class Path(str):
     def chmod(self, *args, **kw):
         return os.chmod(self, *args, **kw)
 
-    @doc(os.listdir)
-    def listdir(self):
-        return [Path(p) for p in os.listdir(self)]
-
     def list(self, filterfn=lambda x: True):
         """Return all direct descendands of directory `self` for which
            `filterfn` returns True.
         """
         return [self / p for p in self.listdir() if filterfn(self / p)]
+
+    @doc(os.listdir)
+    def listdir(self):
+        return [Path(p) for p in os.listdir(self)]
 
     def subdirs(self):
         """Return all direct sub-directories.
@@ -334,7 +337,7 @@ class Path(str):
         return os.lstat(self)
 
     @doc(os.makedirs)
-    def makedirs(self, path=None, mode=0777):
+    def makedirs(self, path=None, mode=0o777):
         pth = os.path.join(self, path) if path else self
         try:
             os.makedirs(pth, mode)
@@ -343,7 +346,7 @@ class Path(str):
         return Path(pth)
 
     @doc(os.mkdir)
-    def mkdir(self, path, mode=0777):
+    def mkdir(self, path, mode=0o777):
         pth = os.path.join(self, path)
         os.mkdir(pth, mode)
         return Path(pth)
@@ -353,7 +356,8 @@ class Path(str):
         return os.remove(self)
 
     def rm(self, fname=None):
-        "Remove a file, don't raise exception if file does not exist."
+        """Remove a file, don't raise exception if file does not exist.
+        """
         if fname is not None:
             return (self / fname).rm()
         try:
