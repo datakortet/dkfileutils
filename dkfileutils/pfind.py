@@ -6,8 +6,8 @@ import os
 import sys
 
 
-def pfind(path, fname):
-    """Find fname in the closest ancestor directory.
+def pfind(path, *fnames):
+    """Find the first fname in the closest ancestor directory.
        For the purposes of this function, we are our own closest ancestor.
     """
 
@@ -24,8 +24,10 @@ def pfind(path, fname):
             yield parent
 
     for d in parents():
-        if fname in os.listdir(d):
-            return os.path.join(d, fname)
+        curdirlist = os.listdir(d)
+        for fname in fnames:
+            if fname in curdirlist:
+                return os.path.join(d, fname)
 
     return None
 
