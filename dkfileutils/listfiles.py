@@ -22,7 +22,7 @@ def read_skipfile(dirname='.', defaults=None):
         return defaults
 
 
-def list_files(dirname='.'):
+def list_files(dirname='.', digest=True):
     """Yield (digest, fname) tuples for all interesting files
        in `dirname`.
     """
@@ -69,7 +69,10 @@ def list_files(dirname='.'):
                 continue
 
             pth = os.path.join(dirname, relpth)
-            yield md5(open(pth).read()).hexdigest(), relpth
+            if digest:
+                yield md5(open(pth).read()).hexdigest(), relpth
+            else:
+                yield relpth
 
 
 def main():  # pragma: nocover
