@@ -15,6 +15,8 @@ def pfind(path, *fnames):
     assert os.path.isdir(wd)
 
     def parents():
+        """yield successive parent directories
+        """
         parent = wd
         yield parent
         while 1:

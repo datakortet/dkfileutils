@@ -563,6 +563,20 @@ def test_ext():
     assert path.Path('hello.world').ext == '.world'
 
 
+def test_list():
+    assert path.Path('.').list(lambda x: False) == []
+
+
+def test_list2():
+    files = """
+      - a
+      - b
+    """
+    with create_files(files) as d:
+        assert len(path.Path(d).list()) == 2
+        assert len(path.Path(d).list(lambda fname: fname[-1] > 'a')) == 1
+
+
 def test_listdir():
     assert os.listdir('.') == path.Path('.').listdir()
 

@@ -82,7 +82,7 @@ def which(filename, interactive=False, verbose=False):
 
         for m in match(fnames):
             found_file = _normalize(os.path.join(pth, m))
-            if found_file not in returnset:
+            if found_file not in returnset:  # pragma: nocover
                 if is_executable(found_file):
                     yield found_file
                 returnset.add(found_file)
@@ -94,6 +94,7 @@ def which(filename, interactive=False, verbose=False):
 
 
 if __name__ == "__main__":  # pragma: nocover
-    for _fname in which(sys.argv[1], interactive=True, verbose='-v' in sys.argv):
+    _args = sys.argv
+    for _fname in which(_args[1], interactive=True, verbose='-v' in _args):
         print(_fname)
     sys.exit(0)

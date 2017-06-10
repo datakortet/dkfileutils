@@ -52,7 +52,11 @@ def changed(dirname, filename='.md5', args=None, glob=None):
 
 
 class Directory(Path):
+    """A path that is a directory.
+    """
     def changed(self, filename='.md5', glob=None):
+        """Are any of the files matched by ``glob`` changed?
+        """
         if glob is not None:
             filename += '.glob-' + ''.join(ch.lower()
                                            for ch in glob if ch.isalpha())
@@ -60,6 +64,8 @@ class Directory(Path):
 
 
 def main():  # pragma: nocover
+    """Return exit code of zero iff directory is not changed.
+    """
     p = argparse.ArgumentParser()
     p.add_argument(
         'directory',

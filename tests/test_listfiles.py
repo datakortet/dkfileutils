@@ -58,3 +58,14 @@ def test_dot_path():
     with create_files(files) as directory:
         os.chdir(directory)
         assert [fname for _hex, fname in list_files('a')] == ['g']
+
+
+def test_listfiles():
+    files = """
+       - a
+       - b
+       - c
+    """
+    with create_files(files) as directory:
+        assert set(list_files(digest=False)) == {'a', 'b', 'c'}
+        

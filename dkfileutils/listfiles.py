@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""List interesting files.
+"""
 import argparse
 import os
 from hashlib import md5
@@ -30,7 +32,7 @@ def list_files(dirname='.', digest=True):
                 '.idea', 'tasks', 'static', 'media', 'data', 'migrations',
                 '.doctrees', '_static', 'node_modules', 'external',
                 'jobs', 'tryout', 'tmp', '_coverage',
-                ]
+               ]
     skipexts = ['.pyc', '~', '.svg', '.txt', '.TTF', '.tmp', '.errmail',
                 '.email', '.bat', '.dll', '.exe', '.Dll', '.jpg', '.gif',
                 '.png', '.ico', '.db', '.md5']
@@ -38,6 +40,8 @@ def list_files(dirname='.', digest=True):
     skipfiles = read_skipfile(dirname)
 
     def clean_dirs(directories):
+        """Remove directories that should be skipped.
+        """
         for d in directories:
             if d.endswith('.egg-info'):
                 directories.remove(d)
@@ -46,6 +50,8 @@ def list_files(dirname='.', digest=True):
                 directories.remove(d)
 
     def keep_file(filename, filepath):
+        """Returns False if the file should be skipped.
+        """
         if filename.startswith('.'):
             return False
         if filepath in skipfiles:
@@ -76,6 +82,8 @@ def list_files(dirname='.', digest=True):
 
 
 def main():  # pragma: nocover
+    """Print checksum and file name for all files in the directory.
+    """
     p = argparse.ArgumentParser(add_help="Recursively list interesting files.")
     p.add_argument(
         'directory', nargs="?", default="",
