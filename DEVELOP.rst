@@ -16,6 +16,10 @@ Create a new version::
 
     inv upversion
 
+Build everythin::
+
+    inv -e build -f
+
 Check in new version numbers:
 
     git add ...

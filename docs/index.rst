@@ -1,13 +1,12 @@
-.. dkfileutils documentation master file, created by
-   sphinx-quickstart on Thu Feb 13 18:59:19 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
+dkfileutils -- file and directory utilities
+===========================================
 
-.. include:: ../README.rst
+.. image:: https://travis-ci.org/datakortet/dkfileutils.svg?branch=master
+   :target: https://travis-ci.org/datakortet/dkfileutils
 
-.. include:: ../DEVELOP.rst
-
+.. image:: https://coveralls.io/repos/datakortet/dkfileutils/badge.svg?branch=master&service=github
+   :target: https://coveralls.io/github/datakortet/dkfileutils?branch=master
 
 
 ..
@@ -15,48 +14,7 @@
   .. toctree::
      :maxdepth: 2
 
-
-API documentation
-=================
-
-changed
-------------------------------------------------
-
-.. automodule:: dkfileutils.changed
-   :members:
-   :undoc-members:
-
-
-listfiles
-------------------------------------------------
-
-.. automodule:: dkfileutils.listfiles
-   :members:
-   :undoc-members:
-
-
-path
-------------------------------------------------
-
-.. automodule:: dkfileutils.path
-   :members:
-   :undoc-members:
-
-
-pfind
-------------------------------------------------
-
-.. automodule:: dkfileutils.pfind
-   :members:
-   :undoc-members:
-
-
-which
-------------------------------------------------
-
-.. automodule:: dkfileutils.which
-   :members:
-   :undoc-members:
+.. include:: modules.rst
 
 
 Indices and tables

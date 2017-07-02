@@ -6,11 +6,34 @@ import os
 import sys
 
 
-def pfind(path, *fnames):
-    """Find the first fname in the closest ancestor directory.
+def pfindall(path, *fnames):
+    """Find all fnames in the closest ancestor directory.
        For the purposes of this function, we are our own closest ancestor.
-    """
+       I.e. given the structure::
 
+            .
+            `-- a
+                |-- b
+                |   |-- c
+                |   |   `-- x.txt
+                |   `-- x.txt
+                `-- y.txt
+
+       the call::
+
+           dict(pfindall('a/b/c', 'x.txt', 'y.txt'))
+
+       will return::
+
+           {
+               'x.txt': 'a/b/c/x.txt',
+               'y.txt': 'a/y.txt'
+           }
+
+       ``a/b/x.txt`` is not returned, since ``a/b/c/x.txt`` is the "closest"
+       ``x.txt`` when starting from ``a/b/c`` (note: pfindall only looks
+       "upwards", ie. towards the root).
+    """
     wd = os.path.abspath(path)
     assert os.path.isdir(wd)
 
@@ -29,8 +52,25 @@ def pfind(path, *fnames):
         curdirlist = os.listdir(d)
         for fname in fnames:
             if fname in curdirlist:
-                return os.path.join(d, fname)
+                yield fname, os.path.join(d, fname)
 
+
+def pfind(path, *fnames):
+    """Find the first fname in the closest ancestor directory.
+       For the purposes of this function, we are our own closest ancestor, i.e.
+       given the structure::
+
+            /srv
+            |-- myapp
+            |   |-- __init__.py
+            |   `-- myapp.py
+            `-- setup.py
+
+       then both ``pfind('/srv', 'setup.py')`` and
+       ``pfind('/srv/myapp', 'setup.py')`` will return ``/srv/setup.py``
+    """
+    for _fname, fpath in pfindall(path, *fnames):
+        return fpath
     return None
 
 
