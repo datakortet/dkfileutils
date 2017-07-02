@@ -8,8 +8,10 @@ dkfileutils -- file and directory utilities
 .. image:: https://coveralls.io/repos/datakortet/dkfileutils/badge.svg?branch=master&service=github
    :target: https://coveralls.io/github/datakortet/dkfileutils?branch=master
 
+.. image:: https://readthedocs.org/projects/dkfileutils/badge/?version=latest
 
-Documentation: http://pythonhosted.org/dkfileutils/
+
+Documentation: http://dkfileutils.readthedocs.io/
 
 
 Contains the following modules
