@@ -16,7 +16,7 @@ Create a new version::
 
     inv upversion
 
-Build everythin::
+Build everything::
 
     inv -e build -f
 
