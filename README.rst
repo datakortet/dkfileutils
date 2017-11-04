@@ -13,6 +13,8 @@ dkfileutils -- file and directory utilities
 .. image:: https://codecov.io/gh/datakortet/dkfileutils/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/datakortet/dkfileutils
 
+.. image:: https://scrutinizer-ci.com/g/datakortet/dkfileutils/badges/quality-score.png?b=master
+   :target: https://scrutinizer-ci.com/g/datakortet/dkfileutils/
 
 
 Documentation: http://dkfileutils.readthedocs.io/
