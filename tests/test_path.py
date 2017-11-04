@@ -11,13 +11,35 @@ import sys
 from dkfileutils import path
 from yamldirs import create_files
 
-from dkfileutils.path import cd
+from dkfileutils.path import cd, doc
 
 opjoin = os.path.join
 
 
 def _relcontent(root):
     return {p.relpath(root) for p in root}
+
+
+def test_doc_decorator():
+    def hasdoc():
+        "hasdoc-docstring"
+        pass
+
+    def nodoc():
+        pass
+
+    @doc(hasdoc)
+    def t1():
+        "t1doc"
+        pass
+
+    @doc(nodoc)
+    def t2():
+        "t2doc"
+
+    assert hasdoc() == nodoc() == t1() == t2()
+    assert t1.__doc__ == "t1-docstring"
+    assert t2.__doc__ is None
 
 
 def test_open():

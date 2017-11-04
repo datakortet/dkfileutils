@@ -15,7 +15,9 @@ import shutil
 
 def doc(srcfn):
     def decorator(fn):
-        if srcfn.__doc__ is not None:
+        if srcfn.__doc__ is None:
+            fn.__doc__ = None
+        else:
             fn.__doc__ = srcfn.__doc__.replace(srcfn.__name__, fn.__name__)
         return fn
     return decorator
