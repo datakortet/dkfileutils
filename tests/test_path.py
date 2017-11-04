@@ -109,7 +109,7 @@ def test_rmtree():
 
 
 def test_curdir():
-    assert path.Path.curdir() == os.getcwd()
+    assert path.Path.curdir() == os.path.normcase(os.getcwd())
 
 
 def test_touch_existing():
@@ -431,7 +431,7 @@ def test_commonprefix():
 
 
 def test_abspath():
-    assert os.path.abspath('empty') == path.Path('empty').abspath()
+    assert os.path.normcase(os.path.abspath('empty')) == path.Path('empty').abspath()
 
 
 def test_drive():
@@ -539,7 +539,7 @@ def test_normpath():
 
 
 def test_realpath():
-    assert os.path.realpath('empty') == path.Path('empty').realpath()
+    assert os.path.normcase(os.path.realpath('empty')) == path.Path('empty').realpath()
 
 
 def test_relpath():
