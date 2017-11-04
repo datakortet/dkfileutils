@@ -66,7 +66,7 @@ def which(filename, interactive=False, verbose=False):
                 res.add(fname)  # exact match
                 continue
             fname_name, fname_ext = os.path.splitext(fname)
-            if fname_name == name and fname_ext.lower() in exe:
+            if fname_name == name and fname_ext.lower() in exe: # pragma: nocover
                 res.add(fname)
         return sorted(res)
 
