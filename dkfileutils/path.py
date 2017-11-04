@@ -6,6 +6,7 @@
 """
 # pylint:disable=C0111,R0904
 # R0904: too many public methods in Path
+from __future__ import print_function
 import os
 import re
 from contextlib import contextmanager
@@ -31,6 +32,7 @@ class Path(str):
                 )
             )
         )
+    __truediv__ = __div__
 
     @doc(os.unlink)
     def unlink(self):

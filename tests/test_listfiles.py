@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 import os
 
 from dkfileutils.listfiles import list_files, read_skipfile
 from yamldirs import create_files
 
 BASEDIR = os.path.dirname(__file__)
-print "FILE:", __file__
-print "BSDIR:", BASEDIR
-print "cwd:", os.getcwd()
+print("FILE:", __file__)
+print("BSDIR:", BASEDIR)
+print("cwd:", os.getcwd())
 
 
 # def _files(fit):
@@ -54,7 +55,7 @@ def test_dot_path():
                             world
             - g
     """
-    print "test_dot_path"
+    print("test_dot_path")
     with create_files(files) as directory:
         os.chdir(directory)
         assert [fname for _hex, fname in list_files('a')] == ['g']

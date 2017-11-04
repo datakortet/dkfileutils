@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Check if contents of directory has changed.
 """
+from __future__ import print_function
 import argparse
 import os
 import hashlib
@@ -41,7 +42,7 @@ def changed(dirname, filename='.md5', args=None, glob=None):
     
     _digest = digest(dirname, glob=glob)
     if args and args.verbose:  # pragma: nocover
-        print "md5:", _digest
+        print("md5:", _digest)
     has_changed = current_digest != _digest
 
     if has_changed:

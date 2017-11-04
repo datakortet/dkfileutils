@@ -2,6 +2,7 @@
 """CLI usage: ``pfind path filename`` will find the closest ancestor directory
    conataining filename (used for finding syncspec.txt and config files).
 """
+from __future__ import print_function
 import os
 import sys
 
@@ -76,4 +77,4 @@ def pfind(path, *fnames):
 
 if __name__ == "__main__":  # pragma: nocover
     _path, filename = sys.argv[1], sys.argv[2]
-    print pfind(_path, filename)
+    print(pfind(_path, filename))

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """List interesting files.
 """
+from __future__ import print_function
 import argparse
 import os
 from hashlib import md5
@@ -99,10 +100,10 @@ def main():  # pragma: nocover
     if not args.directory:
         args.direcotry = args.curdir
     if args.verbose:
-        print args
+        print(args)
 
     for chsm, fname in list_files(args.directory):
-        print chsm, fname
+        print(chsm, fname)
 
 
 if __name__ == "__main__":  # pragma: nocover

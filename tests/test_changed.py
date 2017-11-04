@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import print_function
 import os
 from hashlib import md5
 from yamldirs import create_files
@@ -34,14 +34,14 @@ def test_changed_glob():
     """
     with create_files(files) as _root:
         adir = changed.Directory('a')
-        print 'digest:', changed.digest(adir)
+        print('digest:', changed.digest(adir))
 
         # should be changed first time
         assert adir.changed(glob='**/*')
         assert adir.changed(glob='**/*.txt')
         assert adir.changed(glob='**/*.rst')
 
-        print 'digest:', changed.digest(adir)
+        print('digest:', changed.digest(adir))
 
         # not changed second time
         assert not adir.changed(glob='**/*')
@@ -50,13 +50,13 @@ def test_changed_glob():
 
         dtxt = adir / 'b' / 'c' / 'd.txt'
         with dtxt.open('a') as fp:
-            print >>fp, "appended"
+            print('appended', file=fp)
 
-        print "DTXT:", dtxt.read()
+        print("DTXT:", dtxt.read())
         os.chdir(_root)
 
-        print 'digest:', changed.digest(adir)
-        print 'cwd:', os.getcwd()
+        print('digest:', changed.digest(adir))
+        print('cwd:', os.getcwd())
         adir = changed.Directory('a')
         assert adir.changed(glob='**/*')
         assert adir.changed(glob='**/*.txt')
@@ -64,7 +64,7 @@ def test_changed_glob():
 
         frst = adir / 'e' / 'f.rst'
         with frst.open('a') as fp:
-            print >>fp, 'appended'
+            print('appended', file=fp)
 
         assert adir.changed(glob='**/*')
         assert not adir.changed(glob='**/*.txt')
