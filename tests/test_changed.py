@@ -12,7 +12,7 @@ def test_empty_digest():
         emptydir: []
     """
     with create_files(files) as directory:
-        assert changed.digest('emptydir') == md5("").hexdigest()
+        assert changed.digest('emptydir') == md5(b"").hexdigest()
 
 
 def test_changed():

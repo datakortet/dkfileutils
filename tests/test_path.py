@@ -190,7 +190,7 @@ def test_parents():
                     d.txt: hello world
     """
     with create_files(files) as _root:
-        root = path.Path(_root)
+        root = path.Path(_root).abspath()
         d = root / 'a' / 'b' / 'c' / 'd.txt'
         assert d.open().read() == "hello world"
         print("PARTS:", d.parts())
@@ -578,7 +578,7 @@ def test_list2():
 
 
 def test_listdir():
-    assert os.listdir('.') == path.Path('.').listdir()
+    assert [os.path.normcase(p) for p in os.listdir('.')] == path.Path('.').listdir()
 
 
 def test_lstat():

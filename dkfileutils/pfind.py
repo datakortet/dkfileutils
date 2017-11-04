@@ -53,7 +53,7 @@ def pfindall(path, *fnames):
         curdirlist = os.listdir(d)
         for fname in fnames:
             if fname in curdirlist:
-                yield fname, os.path.join(d, fname)
+                yield fname, os.path.normcase(os.path.join(d, fname))
 
 
 def pfind(path, *fnames):

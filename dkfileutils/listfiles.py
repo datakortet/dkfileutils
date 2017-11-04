@@ -77,7 +77,7 @@ def list_files(dirname='.', digest=True):
 
             pth = os.path.join(dirname, relpth)
             if digest:
-                yield md5(open(pth).read()).hexdigest(), relpth
+                yield md5(open(pth, 'rb').read()).hexdigest(), relpth
             else:
                 yield relpth
 

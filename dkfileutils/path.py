@@ -15,7 +15,8 @@ import shutil
 
 def doc(srcfn):
     def decorator(fn):
-        fn.__doc__ = srcfn.__doc__.replace(srcfn.__name__, fn.__name__)
+        if srcfn.__doc__ is not None:
+            fn.__doc__ = srcfn.__doc__.replace(srcfn.__name__, fn.__name__)
         return fn
     return decorator
 
@@ -23,6 +24,12 @@ def doc(srcfn):
 class Path(str):
     """Poor man's pathlib.
     """
+
+    def __new__(cls, *args, **kw):
+        if isinstance(args[0], Path):
+            return str.__new__(cls, str(args[0]), **kw)
+        else:
+            return str.__new__(cls, os.path.normcase(args[0]), **kw)
 
     def __div__(self, other):
         return Path(
