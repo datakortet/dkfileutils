@@ -10,6 +10,10 @@ dkfileutils -- file and directory utilities
 
 .. image:: https://readthedocs.org/projects/dkfileutils/badge/?version=latest
 
+.. image:: https://codecov.io/gh/datakortet/dkfileutils/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/datakortet/dkfileutils
+
+
 
 Documentation: http://dkfileutils.readthedocs.io/
 
