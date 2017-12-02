@@ -4,40 +4,40 @@ dkfileutils package
 Submodules
 ----------
 
-dkfileutils.changed module
---------------------------
+dkfileutils\.changed module
+---------------------------
 
 .. automodule:: dkfileutils.changed
     :members:
     :undoc-members:
     :show-inheritance:
 
-dkfileutils.listfiles module
-----------------------------
+dkfileutils\.listfiles module
+-----------------------------
 
 .. automodule:: dkfileutils.listfiles
     :members:
     :undoc-members:
     :show-inheritance:
 
-dkfileutils.path module
------------------------
+dkfileutils\.path module
+------------------------
 
 .. automodule:: dkfileutils.path
     :members:
     :undoc-members:
     :show-inheritance:
 
-dkfileutils.pfind module
-------------------------
+dkfileutils\.pfind module
+-------------------------
 
 .. automodule:: dkfileutils.pfind
     :members:
     :undoc-members:
     :show-inheritance:
 
-dkfileutils.which module
-------------------------
+dkfileutils\.which module
+-------------------------
 
 .. automodule:: dkfileutils.which
     :members:
