@@ -248,6 +248,22 @@ def test_dirops():
         assert set(os.listdir(p)) == {'a'}
 
 
+def test_move():
+    files = """
+       - a:
+       - b:
+         - c: []
+    """
+    with create_files(files) as _root:
+        root = path.Path(_root)
+        assert os.listdir(root) == ['a', 'b']
+        assert os.listdir(os.path.join(_root, 'b', 'c')) == []
+        a = root / 'a'
+        a.move('b/c')
+        assert os.listdir(root) == ['b']
+        assert os.listdir(os.path.join(_root, 'b', 'c')) == ['a']
+
+
 def test_rename():
     files = """
         a

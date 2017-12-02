@@ -380,6 +380,10 @@ class Path(str):
     def removedirs(self):
         return os.removedirs(self)
 
+    @doc(shutil.move)
+    def move(self, dst):
+        return shutil.move(self, dst)
+
     @doc(os.rename)
     def rename(self, *args, **kw):
         return os.rename(self, *args, **kw)

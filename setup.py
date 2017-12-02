@@ -20,7 +20,7 @@ import setuptools
 from distutils.core import setup, Command
 from setuptools.command.test import test as TestCommand
 
-version = '1.4.0'
+version = '1.4.1'
 
 
 class PyTest(TestCommand):
