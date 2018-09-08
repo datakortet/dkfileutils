@@ -76,7 +76,7 @@ class Path(str):
     def __contains__(self, item):
         if self.isdir():
             return item in self.listdir()
-        super(Path, self).__contains__(item)
+        return super(Path, self).__contains__(item)
 
     @doc(shutil.rmtree)
     def rmtree(self, subdir=None):
@@ -296,6 +296,9 @@ class Path(str):
     @property
     def ext(self):
         return self.splitext()[1]
+
+    def switchext(self, ext):
+        return self.splitext()[0] + ext
 
     if hasattr(os.path, 'splitunc'):  # pragma: nocover
         @doc(os.path.splitunc)

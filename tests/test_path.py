@@ -103,12 +103,14 @@ def test_contains():
     files = """
         - a
         - b
+        - somename
     """
     with create_files(files) as _root:
         root = path.Path(_root)
         assert 'a' in root
         assert 'b' in root
         assert 'c' not in root
+        assert 'some' in (root / 'somename')
 
 
 def test_rmtree():
@@ -599,6 +601,10 @@ def test_splitext():
 
 def test_ext():
     assert path.Path('hello.world').ext == '.world'
+
+
+def test_switchext():
+    assert path.Path('foo.dot').switchext('.svg') == 'foo.svg'
 
 
 def test_list():
