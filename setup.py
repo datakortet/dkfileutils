@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""dkfileutils - short description
+"""dkfileutils - file and directory utilities
 """
 import sys
 
