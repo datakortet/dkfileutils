@@ -148,6 +148,26 @@ class Path(str):
         name = name.lstrip('.')
         return ['.' + suffix for suffix in name.split('.')[1:]]
 
+    def with_suffix(self, suffix):
+        """Return a new path with the file suffix changed.  If the path
+           has no suffix, add given suffix.  If the given suffix is an empty
+           string, remove the suffix from the path.
+        """
+        if self.sep in suffix or self.altsep and self.altsep in suffix:
+            raise ValueError("Invalid suffix %r" % suffix)
+        if suffix and not suffix.startswith('.') or suffix == '.':
+            raise ValueError("Invalid suffix %r" % suffix)
+        name = self.name
+        namelen = len(name)
+        if not name:
+            raise ValueError("%r has an empty name" % self)
+        old_suffix = self.suffix
+        if not old_suffix:
+            name = name + suffix
+        else:
+            name = name[:-len(old_suffix)] + suffix
+        return Path(str(self)[-namelen:] + name)
+
     # @property
     # def suffix(self):
     #     return Path(os.path.splitext(self)[1])
