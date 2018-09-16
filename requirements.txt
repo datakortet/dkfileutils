@@ -4,3 +4,4 @@ coverage
 sphinx
 PyYAML==3.11
 yamldirs>=1.0.9
+mock

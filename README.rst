@@ -24,6 +24,13 @@ Contains the following modules
 ------------------------------
 See the documentation link (above) and module documentation for detailed docs.
 
+path - a more convenient pathlib
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``pathlib`` implementation where ``Path`` is a subclass of string.
+This design makes it trivial to pass path objects to library functions
+that will use ``os.path.*`` functions without littering your code with
+``str(mypath)`` calls.
+
 changed
 ~~~~~~~
 Code to check if directory contents have changed since last check.
@@ -33,13 +40,6 @@ listfiles
 Yield (digest, fname) tuples for all interesting files
 in `dirname`.  The file names are relative to `curdir`
 unless otherwise specified.
-
-path
-~~~~
-"Poor man's pathlib".  Object-oriented wrapper around `os.path` and
-friends.  Similar to the Python 3 `pathlib`, however paths are
-`str` subclasses and thus much easier to use in an environment
-where `os.path` calls are interspersed with object-oriented code.
 
 pfind
 ~~~~~
