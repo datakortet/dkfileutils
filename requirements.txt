@@ -2,5 +2,5 @@ pytest
 pytest-cov
 coverage
 sphinx
-PyYAML==3.11
+PyYAML==4.2b4
 yamldirs>=1.0.9
