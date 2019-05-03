@@ -1,4 +1,4 @@
-pytest
+pytest==3.9.3
 pytest-cov
 coverage
 sphinx
