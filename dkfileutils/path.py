@@ -12,6 +12,8 @@ import re
 from contextlib import contextmanager
 import shutil
 
+from typing import BinaryIO, Text, Union
+
 
 def doc(srcfn):
     def decorator(fn):
@@ -33,7 +35,7 @@ class Path(str):
         else:
             return str.__new__(cls, os.path.normcase(args[0]), **kw)
 
-    def __div__(self, other):
+    def __div__(self, other):   # type: (Union[Path, Text]) -> Path
         return Path(
             os.path.normcase(
                 os.path.normpath(
@@ -44,13 +46,13 @@ class Path(str):
     __truediv__ = __div__
 
     @doc(os.unlink)
-    def unlink(self):
+    def unlink(self):   # type: () -> None
         os.unlink(self)
 
-    def open(self, mode='r'):
-        return open(self, mode)
+    def open(self, mode='r'):   # type: (str) -> BinaryIO
+        return open(str(self), mode)
 
-    def read(self, mode='r'):
+    def read(self, mode='r'):   # type: (str) -> Text
         with self.open(mode) as fp:
             return fp.read()
 
