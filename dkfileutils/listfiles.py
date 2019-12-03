@@ -29,14 +29,17 @@ def list_files(dirname='.', digest=True):
     """Yield (digest, fname) tuples for all interesting files
        in `dirname`.
     """
-    skipdirs = ['__pycache__', '.git', '.svn', 'htmlcov', 'dist', 'build',
-                '.idea', 'tasks', 'static', 'media', 'data', 'migrations',
-                '.doctrees', '_static', 'node_modules', 'external',
-                'jobs', 'tryout', 'tmp', '_coverage',
-               ]
-    skipexts = ['.pyc', '~', '.svg', '.txt', '.TTF', '.tmp', '.errmail',
-                '.email', '.bat', '.dll', '.exe', '.Dll', '.jpg', '.gif',
-                '.png', '.ico', '.db', '.md5']
+    skipdirs = [
+        '__pycache__', '.git', '.svn', 'htmlcov', 'dist', 'build',
+        '.idea', 'tasks', 'static', 'media', 'data', 'migrations',
+        '.doctrees', '_static', 'node_modules', 'external',
+        'jobs', 'tryout', 'tmp', '_coverage',
+    ]
+    skipexts = [
+        '.pyc', '~', '.svg', '.txt', '.TTF', '.tmp', '.errmail',
+        '.email', '.bat', '.dll', '.exe', '.Dll', '.jpg', '.gif',
+        '.png', '.ico', '.db', '.md5'
+    ]
     dirname = str(dirname)
     skipfiles = read_skipfile(dirname)
 

@@ -258,7 +258,7 @@ def test_move():
     """
     with create_files(files) as _root:
         root = path.Path(_root)
-        assert os.listdir(root) == ['a', 'b']
+        assert sorted(os.listdir(root)) == ['a', 'b']
         assert os.listdir(os.path.join(_root, 'b', 'c')) == []
         a = root / 'a'
         a.move('b/c')
@@ -408,7 +408,7 @@ def test_subdirs():
     """
     with create_files(files) as _root:
         root = path.Path(_root)
-        assert [d.relpath(root) for d in root.subdirs()] == ['b', 'e']
+        assert sorted([d.relpath(root) for d in root.subdirs()]) == ['b', 'e']
 
 
 def test_files():
