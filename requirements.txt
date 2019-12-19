@@ -1,6 +1,6 @@
-pytest==3.9.3
-pytest-cov
-coverage
-sphinx
-PyYAML==4.2b4
+pytest==3.10.1
+pytest-cov==2.6.1
+coverage==4.5.3
+sphinx        
+PyYAML==5.1.2
 yamldirs>=1.0.9
