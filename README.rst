@@ -1,6 +1,7 @@
 
-dkfileutils -- file and directory utilities
-===========================================
+
+dkfileutils - file and directory utilities
+==========================================
 
 .. image:: https://travis-ci.org/datakortet/dkfileutils.svg?branch=master
    :target: https://travis-ci.org/datakortet/dkfileutils
@@ -16,9 +17,17 @@ dkfileutils -- file and directory utilities
 .. image:: https://scrutinizer-ci.com/g/datakortet/dkfileutils/badges/quality-score.png?b=master
    :target: https://scrutinizer-ci.com/g/datakortet/dkfileutils/
 
-
 Documentation: http://dkfileutils.readthedocs.io/
 
+.. image:: https://gitlab.com/norsktest/dkfileutils/badges/master/pipeline.svg
+   :target: https://gitlab.com/norsktest/dkfileutils/commits/master
+   :alt: pipeline status
+
+.. image:: https://img.shields.io/badge/docs-darkgreen.svg
+   :target: https://norsktest.gitlab.io/dkfileutils
+   :alt: documentation
+
+.. include:: badge-wheel.rst
 
 Contains the following modules
 ------------------------------
@@ -49,23 +58,3 @@ which
 ~~~~~
 Functions for finding executable files on the path.
 
-
-Installing from PyPI
---------------------
-
-This is what you want if you just want to use dkfileutils:
-
-   pip install dkfileutils
-
-
-As a source package
--------------------
-This is what you want if you are developing dkfileutils or want 
-to make local changes to the source code.
-
-   pip install -e <path>
-
-
-
-
-See docs/ folder for documentation.
