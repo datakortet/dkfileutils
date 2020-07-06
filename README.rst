@@ -19,15 +19,6 @@ dkfileutils - file and directory utilities
 
 Documentation: http://dkfileutils.readthedocs.io/
 
-.. image:: https://gitlab.com/norsktest/dkfileutils/badges/master/pipeline.svg
-   :target: https://gitlab.com/norsktest/dkfileutils/commits/master
-   :alt: pipeline status
-
-.. image:: https://img.shields.io/badge/docs-darkgreen.svg
-   :target: https://norsktest.gitlab.io/dkfileutils
-   :alt: documentation
-
-.. include:: badge-wheel.rst
 
 Contains the following modules
 ------------------------------
