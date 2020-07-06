@@ -258,6 +258,11 @@ class Path(str):
     def relpath(self, other=""):
         return Path(os.path.relpath(str(self), str(other)))
 
+    def path_to(self, other):
+        """The reverse of relpath.
+        """
+        return Path(os.path.relpath(str(other), str(self)))
+
     @doc(os.path.split)
     def split(self, sep=None, maxsplit=-1):
         # some heuristics to determine if this is a str.split call or

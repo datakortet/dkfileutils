@@ -586,6 +586,11 @@ def test_relpath():
     assert os.path.relpath('empty') == path.Path('empty').relpath()
 
 
+def test_path_to():
+    parent = os.path.abspath('..')
+    assert path.Path('.').path_to(parent) == '..'
+
+
 def test_split():
     assert os.path.split('empty') == path.Path('empty').split()
     assert 'string variable'.split() == path.Path('string variable').split()
