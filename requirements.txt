@@ -1,6 +1,6 @@
-pytest==3.10.1
-pytest-cov==2.6.1
-coverage==4.4.1
+pytest>=4.6
+pytest-cov>=2.12.1
+coverage==5.5
 sphinxcontrib-websupport==1.1.2       # latest version with py 2.7 support
 Sphinx==1.8.5
 PyYAML==5.1.2
