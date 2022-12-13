@@ -39,7 +39,7 @@ class Path(str):
         return Path(
             os.path.normcase(
                 os.path.normpath(
-                    os.path.join(self, other)
+                    os.path.join(self, other) if self and other else ''
                 )
             )
         )
