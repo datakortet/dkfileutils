@@ -35,7 +35,7 @@ class Path(str):
         else:
             return str.__new__(cls, os.path.normcase(args[0]), **kw)
 
-    def __div__(self, other):   # type: (Union[Path, Text]) -> Path
+    def __div__(self, other: str) -> 'Path':   # type: (Union[Path, Text]) -> Path
         return Path(
             os.path.normcase(
                 os.path.normpath(
@@ -46,13 +46,13 @@ class Path(str):
     __truediv__ = __div__
 
     @doc(os.unlink)
-    def unlink(self):   # type: () -> None
+    def unlink(self) -> None:
         os.unlink(self)
 
-    def open(self, mode='r'):   # type: (str) -> BinaryIO
+    def open(self, mode='r') -> BinaryIO:
         return open(str(self), mode)
 
-    def read(self, mode='r'):   # type: (str) -> Text
+    def read(self, mode='r') -> Text:
         with self.open(mode) as fp:
             return fp.read()
 
