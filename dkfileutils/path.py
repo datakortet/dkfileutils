@@ -393,6 +393,10 @@ class Path(str):
     @doc(shutil.move)
     def move(self, dst):
         return shutil.move(self, dst)
+    
+    @doc(shutil.copy)
+    def copy(self, dst):
+        return shutil.copy(self, dst)
 
     @doc(os.rename)
     def rename(self, *args, **kw):
