@@ -1,18 +1,16 @@
-# -*- coding: utf-8 -*-
-"""Poor man's pathlib.
-
-   (Path instances are subclasses of str, so interoperability with existing
-   os.path code is greater than with Python 3's pathlib.)
 """
-# pylint:disable=C0111,R0904
-# R0904: too many public methods in Path
-from __future__ import print_function
+Poor man's pathlib.
+
+(Path instances are subclasses of str, so interoperability with existing
+os.path code is greater than with Python 3's pathlib.)
+"""
+from __future__ import annotations
 import os
 import re
 from contextlib import contextmanager
 import shutil
 
-from typing import BinaryIO, Text, Union
+from typing import BinaryIO, Text
 
 
 def doc(srcfn):
@@ -35,7 +33,7 @@ class Path(str):
         else:
             return str.__new__(cls, os.path.normcase(args[0]), **kw)
 
-    def __div__(self, other: str) -> 'Path':   # type: (Union[Path, Text]) -> Path
+    def __div__(self, other: Path | str) -> 'Path':
         return Path(
             os.path.normcase(
                 os.path.normpath(
@@ -101,9 +99,9 @@ class Path(str):
     def touch(self, mode=0o666, exist_ok=True):
         """Create this file with the given access mode, if it doesn't exist.
            Based on:
-            
+
               https://github.com/python/cpython/blob/master/Lib/pathlib.py)
-              
+
         """
         if exist_ok:
             # First try to bump modification time
@@ -122,7 +120,7 @@ class Path(str):
         fd = os.open(self, flags, mode)
         os.close(fd)
 
-    def glob(self, pat):
+    def glob(self, pat: str) -> list[Path]:
         """`pat` can be an extended glob pattern, e.g. `'**/*.less'`
            This code handles negations similarly to node.js' minimatch, i.e.
            a leading `!` will negate the entire pattern.
@@ -148,9 +146,6 @@ class Path(str):
                 r += pat[i]
                 i += 1
         r += r'\Z(?ms)'
-        # print '\n\npat', pat
-        # print 'regex:', r
-        # print [s.relpath(self).replace('\\', '/') for s in self]
         rx = re.compile(r)
 
         def match(d):
@@ -393,7 +388,7 @@ class Path(str):
     @doc(shutil.move)
     def move(self, dst):
         return shutil.move(self, dst)
-    
+
     @doc(shutil.copy)
     def copy(self, dst):
         return shutil.copy(self, dst)

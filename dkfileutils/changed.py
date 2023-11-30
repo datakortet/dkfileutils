@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """Check if contents of directory has changed.
 """
-from __future__ import print_function
 import argparse
 import os
 import hashlib
@@ -25,12 +23,12 @@ def digest(dirname, glob=None):
     return md5.hexdigest()
 
 
-def changed(dirname, filename='.md5', args=None, glob=None):
+def changed(dirname, filename='.md5', args=None, glob=None) -> bool:
     """Has `glob` changed in `dirname`
 
-    Args:
-        dirname: directory to measure
-        filename: filename to store checksum
+       Args:
+           dirname: directory to measure
+           filename: filename to store checksum
     """
     root = Path(dirname)
     if not root.exists():
@@ -39,7 +37,7 @@ def changed(dirname, filename='.md5', args=None, glob=None):
 
     cachefile = root / filename
     current_digest = cachefile.open().read() if cachefile.exists() else ""
-    
+
     _digest = digest(dirname, glob=glob)
     if args and args.verbose:  # pragma: nocover
         print("md5:", _digest)
@@ -55,7 +53,7 @@ def changed(dirname, filename='.md5', args=None, glob=None):
 class Directory(Path):
     """A path that is a directory.
     """
-    def changed(self, filename='.md5', glob=None):
+    def changed(self, filename='.md5', glob=None) -> bool:
         """Are any of the files matched by ``glob`` changed?
         """
         if glob is not None:

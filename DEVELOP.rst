@@ -3,40 +3,16 @@
 Developing dkfileutils
 ======================
 
-.. note:: if you're using this as a template for new projects, remember to
-          ``python setup.py register <projectname>`` before you upload to
-          PyPi.
 
 Uploading to PyPI
 -----------------
-This requires pyinvoke (``pip install invoke``) and dk-tasklib
-(``pip install dk-tasklib``). These are not listed as requirements.
+New versions are automatically uploaded to PyPI when a new tag is pushed to
+GitHub. To create a new tag, run::
 
-Create a new version::
+    git tag -a v0.1.0 -m "Version 0.1.0"
+    git push --tags
 
-    inv upversion
-
-Build everything::
-
-    inv -e build -f
-
-Check in new version numbers:
-
-    git add ...
-    git commit ...
-
-Verify that everything is copacetic::
-
-    inv publish
-
-Tag the release (replace 1.2.3 with the new version number)::
-
-    git tag -a v1.2.3 -m "Version 1.2.3"
-    git push origin --tags
-
-then push to PyPi::
-
-    inv publish -f
+(or internally ``dk upversion --tag``)
 
 
 Running tests
@@ -58,4 +34,6 @@ Building documentation
 ::
 
     python setup.py build_sphinx
+
+internally (``dk docs``).
 

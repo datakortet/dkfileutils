@@ -58,7 +58,7 @@ def which(filename, interactive=False, verbose=False):
         raise ValueError("which can only search for executable files")
 
     def match(filenames):
-        """Returns the sorted subset of ``filenames`` that matches 
+        """Returns the sorted subset of ``filenames`` that matches
            ``filename``.
         """
         res = set()
@@ -66,8 +66,8 @@ def which(filename, interactive=False, verbose=False):
             if fname == filename:  # pragma: nocover
                 res.add(fname)  # exact match
                 continue
-            fname_name, fname_ext = os.path.splitext(fname)
-            if fname_name == name and fname_ext.lower() in exe:  # pragma: nocover
+            fname_name, ext = os.path.splitext(fname)
+            if fname_name == name and ext.lower() in exe:  # pragma: nocover
                 res.add(fname)
         return sorted(res)
 

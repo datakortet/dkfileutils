@@ -3,12 +3,6 @@
 dkfileutils - file and directory utilities
 ==========================================
 
-.. image:: https://travis-ci.org/datakortet/dkfileutils.svg?branch=master
-   :target: https://travis-ci.org/datakortet/dkfileutils
-
-.. image:: https://coveralls.io/repos/datakortet/dkfileutils/badge.svg?branch=master&service=github
-   :target: https://coveralls.io/github/datakortet/dkfileutils?branch=master
-
 .. image:: https://readthedocs.org/projects/dkfileutils/badge/?version=latest
 
 .. image:: https://codecov.io/gh/datakortet/dkfileutils/branch/master/graph/badge.svg
@@ -40,6 +34,12 @@ path
 friends.  Similar to the Python 3 `pathlib`, however paths are
 `str` subclasses and thus much easier to use in an environment
 where `os.path` calls are interspersed with object-oriented code.
+
+Brett Cannon strongly dislikes paths being `str` subclasses, see
+https://snarky.ca/why-pathlib-path-doesn-t-inherit-from-str/
+While I can agree with him in principle, this is clearly a case
+of "practicality beats purity".  The official ``pathlib`` version
+of ``'/b/' in Path('/a/b/c')`` is rather baroque.
 
 pfind
 ~~~~~
