@@ -4,7 +4,7 @@ _schema: https://static.datakortet.no/schema/dkbuild.schema.yaml
 package:
   name: dkfileutils
   description: file and directory utilities
-  version: 1.4.5
+  version: 1.4.6
   created: 2015
 
 build:
