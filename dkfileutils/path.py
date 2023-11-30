@@ -145,7 +145,7 @@ class Path(str):
             else:
                 r += pat[i]
                 i += 1
-        r += r'\Z(?ms)'
+        r = r'(?ms)' + r + r'\Z'
         rx = re.compile(r)
 
         def match(d):
@@ -307,11 +307,11 @@ class Path(str):
         def splitunc(self):
             return os.path.splitunc(self)
 
-    @doc(os.access)
+    # @doc(os.access)
     def access(self, *args, **kw):
         return os.access(self, *args, **kw)
 
-    @doc(os.chdir)
+    # @doc(os.chdir)
     def chdir(self):
         return os.chdir(self)
 
@@ -334,7 +334,7 @@ class Path(str):
         """
         return [self / p for p in self.listdir() if filterfn(self / p)]
 
-    @doc(os.listdir)
+    # @doc(os.listdir)
     def listdir(self):
         return [Path(p) for p in os.listdir(self)]
 
@@ -414,7 +414,7 @@ class Path(str):
     def stat(self, *args, **kw):
         return os.stat(self, *args, **kw)
 
-    @doc(os.utime)
+    # @doc(os.utime)
     def utime(self, time=None):
         os.utime(self, time)
         return self.stat()
