@@ -163,7 +163,7 @@ def test_touch_existing():
     before = time.time()
     with create_files(files) as _root:
         after = time.time()
-        assert before < after
+        assert before <= after
         print('before/after', before, after, after - before)
         root = path.Path(_root)
         print("FILES:", root.contents())
