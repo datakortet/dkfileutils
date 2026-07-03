@@ -15,7 +15,8 @@ def digest(dirname, glob=None):
         fnames = [fname for _, fname in list_files(Path(dirname))]
         for fname in sorted(fnames):
             fname = os.path.join(dirname, fname)
-            md5.update(open(fname, 'rb').read())
+            with open(fname, 'rb') as f:
+                md5.update(f.read())
     else:
         fnames = Path(dirname).glob(glob)
         for fname in sorted(fnames):
@@ -36,7 +37,10 @@ def changed(dirname, filename='.md5', args=None, glob=None) -> bool:
         return True
 
     cachefile = root / filename
-    current_digest = cachefile.open().read() if cachefile.exists() else ""
+    if cachefile.exists():
+        current_digest = cachefile.open(encoding='utf-8').read()
+    else:
+        current_digest = ""
 
     _digest = digest(dirname, glob=glob)
     if args and args.verbose:  # pragma: nocover
@@ -65,6 +69,7 @@ class Directory(Path):
 def main():  # pragma: nocover
     """Return exit code of zero iff directory is not changed.
     """
+    import sys  # pylint: disable=import-outside-toplevel
     p = argparse.ArgumentParser()
     p.add_argument(
         'directory',
@@ -76,7 +81,6 @@ def main():  # pragma: nocover
     )
     args = p.parse_args()
 
-    import sys
     _changed = changed(sys.argv[1], args=args)
     sys.exit(_changed)
 

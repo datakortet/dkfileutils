@@ -10,7 +10,7 @@ import re
 from contextlib import contextmanager
 import shutil
 
-from typing import BinaryIO, Text
+from typing import BinaryIO
 
 
 def doc(srcfn):
@@ -30,8 +30,7 @@ class Path(str):
     def __new__(cls, *args, **kw):
         if isinstance(args[0], Path):
             return str.__new__(cls, str(args[0]), **kw)
-        else:
-            return str.__new__(cls, os.path.normcase(args[0]), **kw)
+        return str.__new__(cls, os.path.normcase(args[0]), **kw)
 
     def __div__(self, other: Path | str) -> 'Path':
         return Path(
@@ -47,10 +46,10 @@ class Path(str):
     def unlink(self) -> None:
         os.unlink(self)
 
-    def open(self, mode='r') -> BinaryIO:
-        return open(str(self), mode)
+    def open(self, mode='r', encoding=None) -> BinaryIO:
+        return open(str(self), mode, encoding=encoding)
 
-    def read(self, mode='r') -> Text:
+    def read(self, mode='r') -> str:
         with self.open(mode) as fp:
             return fp.read()
 
@@ -115,9 +114,11 @@ class Path(str):
             else:
                 return
         flags = os.O_CREAT | os.O_WRONLY
-        if not exist_ok:
+        if exist_ok:
+            fd = os.open(self, flags, mode)
+        else:
             flags |= os.O_EXCL
-        fd = os.open(self, flags, mode)
+            fd = os.open(self, flags, mode)
         os.close(fd)
 
     def glob(self, pat: str) -> list[Path]:
@@ -380,6 +381,7 @@ class Path(str):
             self.remove()
         except OSError:
             pass
+        return None
 
     @doc(os.removedirs)
     def removedirs(self):

@@ -38,7 +38,7 @@ def _listdir(pth, extensions):
         return [fname for fname in os.listdir(pth)
                 if os.path.splitext(fname)[1] in extensions]
     except OSError:  # pragma: nocover
-        pass
+        return None
 
 
 def _normalize(pth):
@@ -90,7 +90,7 @@ def which(filename, interactive=False, verbose=False):
         found = True
 
     if not found and interactive:  # pragma: nocover
-        print("Couldn't find %r anywhere on the path.." % filename)
+        print(f"Couldn't find {filename!r} anywhere on the path..")
         sys.exit(1)
 
 

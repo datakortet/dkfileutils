@@ -18,9 +18,10 @@ def read_skipfile(dirname='.', defaults=None):
     if defaults is None:
         defaults = ['Makefile', 'make.bat', 'atlassian-ide-plugin.xml']
     try:
-        return defaults + open(
-            os.path.join(dirname, SKIPFILE_NAME)
-        ).read().splitlines()
+        with open(
+            os.path.join(dirname, SKIPFILE_NAME), encoding='utf-8'
+        ) as f:
+            return defaults + f.read().splitlines()
     except IOError:
         return defaults
 
@@ -80,7 +81,8 @@ def list_files(dirname='.', digest=True):
 
             pth = os.path.join(dirname, relpth)
             if digest:
-                yield md5(open(pth, 'rb').read()).hexdigest(), relpth
+                with open(pth, 'rb') as f:
+                    yield md5(f.read()).hexdigest(), relpth
             else:
                 yield relpth
 
