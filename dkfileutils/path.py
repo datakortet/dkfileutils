@@ -10,7 +10,7 @@ import re
 from contextlib import contextmanager
 import shutil
 
-from typing import BinaryIO
+from typing import IO
 
 
 def doc(srcfn):
@@ -46,19 +46,24 @@ class Path(str):
     def unlink(self) -> None:
         os.unlink(self)
 
-    def open(self, mode='r', encoding=None) -> BinaryIO:
+    def open(self, mode='r', encoding=None) -> IO:
+        """Open the file. Text modes default to utf-8 (not the platform
+           default), so files read/write identically on Windows and Linux.
+        """
+        if encoding is None and 'b' not in mode:
+            encoding = 'utf-8'
         return open(str(self), mode, encoding=encoding)
 
-    def read(self, mode='r') -> str:
-        with self.open(mode) as fp:
+    def read(self, mode='r', encoding=None) -> str:
+        with self.open(mode, encoding=encoding) as fp:
             return fp.read()
 
-    def write(self, txt, mode='w'):
-        with self.open(mode) as fp:
+    def write(self, txt, mode='w', encoding=None):
+        with self.open(mode, encoding=encoding) as fp:
             fp.write(txt)
 
-    def append(self, txt, mode='a'):
-        with self.open(mode) as fp:
+    def append(self, txt, mode='a', encoding=None):
+        with self.open(mode, encoding=encoding) as fp:
             fp.write(txt)
 
     def __iter__(self):

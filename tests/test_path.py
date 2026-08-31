@@ -83,6 +83,60 @@ def test_append():
         assert bfile.read() == 'hello world'
 
 
+def test_utf8_default_roundtrip():
+    # text modes must default to utf-8 on every platform (cp1252 on
+    # windows crashed on utf-8 content, github.com/datakortet/dkfileutils)
+    files = """
+        b: hello
+    """
+    with create_files(files) as root:
+        bfile = path.Path(root) / 'b'
+        bfile.write('blåbærsyltetøy – søtt')
+        assert bfile.read('rb') == (
+            'blåbærsyltetøy – søtt'.encode('utf-8')
+        )
+        assert bfile.read() == 'blåbærsyltetøy – søtt'
+        bfile.append(' ✔')
+        assert bfile.read().endswith(' ✔')
+
+
+def test_read_utf8_bytes_undecodable_as_cp1252():
+    # 0x9d is unmapped in cp1252 but a valid utf-8 continuation byte;
+    # this is the byte that crashed dktestpackage on windows
+    files = """
+        b: hello
+    """
+    with create_files(files) as root:
+        bfile = path.Path(root) / 'b'
+        bfile.write('❝ quoted ❞')       # encodes with 0x9d bytes
+        assert bfile.read() == '❝ quoted ❞'
+
+
+def test_explicit_encoding_still_wins():
+    files = """
+        b: hello
+    """
+    with create_files(files) as root:
+        bfile = path.Path(root) / 'b'
+        bfile.write('blå', encoding='latin-1')
+        assert bfile.read('rb') == b'bl\xe5'
+        assert bfile.read(encoding='latin-1') == 'blå'
+        with bfile.open(encoding='latin-1') as fp:
+            assert fp.read() == 'blå'
+
+
+def test_binary_mode_unaffected():
+    files = """
+        b: hello
+    """
+    with create_files(files) as root:
+        bfile = path.Path(root) / 'b'
+        bfile.write(b'\x00\x9d\xff', mode='wb')
+        assert bfile.read('rb') == b'\x00\x9d\xff'
+        with bfile.open('rb') as fp:
+            assert fp.read() == b'\x00\x9d\xff'
+
+
 def test_iter():
     files = """
         - .dotfile
