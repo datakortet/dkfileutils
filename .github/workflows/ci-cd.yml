@@ -22,7 +22,7 @@ jobs:
           mkdir -p $LINTDIR
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.13'
 
       - run: pip install flake8
       - run: flake8 dkfileutils/** --max-line-length=199
@@ -34,7 +34,7 @@ jobs:
         - uses: actions/checkout@v4
         - uses: actions/setup-python@v4
           with:
-            python-version: '3.9'
+            python-version: '3.13'
         - name: setup directories
           shell: bash
           run: |
@@ -56,13 +56,13 @@ jobs:
     strategy:
       matrix:
 
-        python-version: [ '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: [ '3.13', '3.14' ]
 
         os: [ubuntu-latest]
         include:
-          - python-version: '3.12'
+          - python-version: '3.13'
             os: windows-latest
-          - python-version: '3.12'
+          - python-version: '3.13'
             os: macos-latest
 
     steps:
@@ -97,7 +97,7 @@ jobs:
         run: mkdir -p $PIP_CACHE_DIR
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: '3.13'
 
       - name: Cleanup
         run: |
